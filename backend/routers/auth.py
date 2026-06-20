@@ -156,7 +156,11 @@ def reset_password(data: ResetPasswordModel):
 # ── Logout ───────────────────────────────────────────────
 @router.post("/logout")
 def logout(response: Response):
-    response.delete_cookie("vgulg_token")
+    response.delete_cookie(
+        key="vgulg_token",
+        secure=True,
+        samesite="none"
+    )
     return {"status": True, "message": "Logged out successfully"}
 
 # ── Get Me ───────────────────────────────────────────────
