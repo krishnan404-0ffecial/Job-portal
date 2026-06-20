@@ -9,16 +9,26 @@ from bson import ObjectId
 app = FastAPI(title="VGULG Foundation – Internal Job Portal API", version="1.0.0")
 
 # CORS — must be added FIRST before any other middleware
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173","https://job-portal-azure-xi.vercel.app",],
+#     allow_credentials=True,
+#     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+#     allow_headers=["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
+#     expose_headers=["Set-Cookie"],
+#     max_age=600,
+# )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173","https://job-portal-azure-xi.vercel.app",],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://job-portal-azure-xi.vercel.app",
+    ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allow_headers=["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
-    expose_headers=["Set-Cookie"],
-    max_age=600,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
-
 pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def auto_seed():
