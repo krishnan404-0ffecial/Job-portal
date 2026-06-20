@@ -1,12 +1,17 @@
 /* eslint-disable react/prop-types */
+import React, { useState } from "react";
 import styled from "styled-components";
 import Logo from "../Logo";
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../../context/UserContext";
+import { FiMenu, FiX } from "react-icons/fi";
 
 const Navbar = ({ navbarRef }) => {
     const { user, userLoading } = useUserContext();
     const isLoggedIn = !userLoading && user && user.email;
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
     return (
         <Wrapper ref={navbarRef}>
@@ -30,6 +35,33 @@ const Navbar = ({ navbarRef }) => {
                         </NavLink>
                     </div>
                 )}
+
+                {/* Mobile Menu Toggle */}
+                <button className="mobile-toggle" onClick={toggleMobileMenu}>
+                    {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+                </button>
+
+                {/* Mobile Menu Overlay */}
+                <div className={`mobile-menu ${isMobileMenuOpen ? "open" : ""}`}>
+                    <nav className="mobile-nav-links">
+                        <NavLink className="mobile-nav-item" to="/all-jobs" onClick={toggleMobileMenu}>
+                            Browse Jobs
+                        </NavLink>
+                        <NavLink className="mobile-nav-item" to="/dashboard" onClick={toggleMobileMenu}>
+                            Dashboard
+                        </NavLink>
+                        {!isLoggedIn && (
+                            <div className="mobile-nav-actions">
+                                <NavLink className="btn-login-mobile" to="/login" onClick={toggleMobileMenu}>
+                                    Log In
+                                </NavLink>
+                                <NavLink className="btn-register-mobile" to="/register" onClick={toggleMobileMenu}>
+                                    Get Started →
+                                </NavLink>
+                            </div>
+                        )}
+                    </nav>
+                </div>
             </div>
         </Wrapper>
     );
@@ -130,13 +162,86 @@ const Wrapper = styled.div`
         transform: translateY(0);
     }
 
-    @media screen and (max-width: 768px) {
-        .nav-links { display: none; }
-        .container { padding: 0.9rem 1.2rem; }
-        .btn-login { display: none; }
+    .mobile-toggle {
+        display: none;
+        background: transparent;
+        border: none;
+        color: var(--color-text);
+        cursor: pointer;
+        z-index: 1000;
+        padding: 4px;
     }
-    @media screen and (max-width: 400px) {
-        .btn-register { padding: 8px 16px; font-size: 13px; }
+
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: var(--color-white);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 900;
+        display: flex;
+        flex-direction: column;
+        padding: 80px 24px 24px;
+    }
+    .mobile-menu.open {
+        right: 0;
+    }
+
+    .mobile-nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .mobile-nav-item {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    .mobile-nav-item:hover, .mobile-nav-item.active {
+        color: var(--color-primary);
+    }
+
+    .mobile-nav-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .btn-login-mobile {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        text-align: center;
+        padding: 12px;
+        border: 1.5px solid var(--color-border);
+        border-radius: var(--radius-full);
+        text-decoration: none;
+    }
+
+    .btn-register-mobile {
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        text-align: center;
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+        padding: 12px;
+        border-radius: var(--radius-full);
+        text-decoration: none;
+    }
+
+    @media screen and (max-width: 768px) {
+        .nav-links, .nav-actions { display: none; }
+        .container { padding: 0.9rem 1.2rem; }
+        .mobile-toggle { display: block; }
     }
 `;
 

@@ -180,6 +180,7 @@ const Wrapper = styled.section`
     }
     .content-row {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         margin-top: calc(2rem + 0.5vw);
     }
     .table {

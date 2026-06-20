@@ -377,6 +377,19 @@ const Wrapper = styled.div`
     }
     .action-btn.secondary:hover { background: #f1f5f9; border-color: #cbd5e1; }
 
+    @media (max-width: 600px) {
+        .hero-body {
+            padding: 60px 1.25rem 1.5rem;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1rem;
+        }
+        .hero-tags { justify-content: center; }
+        .hero-actions { justify-content: center; width: 100%; }
+        .action-btn { flex: 1; justify-content: center; }
+    }
+
     /* ── Two-col grid ── */
     .grid-two {
         display: grid;

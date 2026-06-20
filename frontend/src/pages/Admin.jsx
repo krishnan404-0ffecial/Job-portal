@@ -729,6 +729,7 @@ const Wrapper = styled.section`
     .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
     @media (max-width: 900px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 500px) { .stat-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 400px) { .stat-grid { grid-template-columns: 1fr; } }
 
     .stat-card {
         background: white; border: 1px solid #f0f0f0; border-left: 4px solid;

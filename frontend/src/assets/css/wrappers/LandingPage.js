@@ -274,11 +274,16 @@ const Wrapper = styled.div`
     }
 
     @media screen and (max-width: 600px) {
-        padding: 1.5rem 1rem;
-        h1 { font-size: 2rem; }
-        .stats-row { gap: 1.5rem; }
-        .btn-grp { flex-direction: column; align-items: flex-start; }
-        .btn, .btn-secondary { width: 100%; text-align: center; justify-content: center; }
+        padding: 1.2rem 1rem;
+        h1 { font-size: 1.8rem; line-height: 1.2; }
+        .hero-desc { font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; }
+        .stats-row { gap: 1rem; justify-content: space-between; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; }
+        .stat-item { flex: 1; min-width: auto; text-align: center; }
+        .stat-number { font-size: 1.25rem; }
+        .stat-label { font-size: 0.7rem; }
+        .btn-grp { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
+        .btn, .btn-secondary { width: 100%; text-align: center; justify-content: center; padding: 12px 20px; }
+        .eyebrow { font-size: 10.5px; padding: 5px 12px; margin-bottom: 1rem; }
     }
 `;
 

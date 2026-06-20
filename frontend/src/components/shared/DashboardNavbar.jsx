@@ -45,7 +45,7 @@ const Wrapper = styled.nav`
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
     padding: 1rem calc(1rem + 0.7vw);
     background-color: var(--color-white);
-    z-index: 1;
+    z-index: 10;
 
     .nav-container {
         width: 100%;
@@ -85,6 +85,16 @@ const Wrapper = styled.nav`
     @media (min-width: 992px) {
         position: sticky;
         top: 0;
+    }
+    
+    @media (max-width: 768px) {
+        padding: 0.8rem 1rem;
+        .start .toggler {
+            font-size: 24px;
+        }
+        .center svg { /* Adjust logo size if needed */
+            height: 28px;
+        }
     }
 `;
 
