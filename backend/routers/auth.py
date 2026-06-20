@@ -121,7 +121,8 @@ def login(data: LoginModel, response: Response):
     token = create_token({"id": str(user["_id"]), "role": user["role"]})
     response.set_cookie(
         key="vgulg_token", value=token,
-        httponly=True, samesite="lax",
+        httponly=True, secure=True,
+        samesite="none",
         max_age=86400
     )
     print(f"[OK] User logged in: {foundation_id}")
@@ -155,7 +156,11 @@ def reset_password(data: ResetPasswordModel):
 # ── Logout ───────────────────────────────────────────────
 @router.post("/logout")
 def logout(response: Response):
-    response.delete_cookie("vgulg_token")
+    response.delete_cookie(
+        key="vgulg_token",
+        secure=True,
+        samesite="none"
+    )
     return {"status": True, "message": "Logged out successfully"}
 
 # ── Get Me ───────────────────────────────────────────────
