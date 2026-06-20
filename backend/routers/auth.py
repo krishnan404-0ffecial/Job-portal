@@ -30,6 +30,16 @@ class ResetPasswordModel(BaseModel):
     email: str       # extra verification
     new_password: str
 
+class RecruiterApplyModel(BaseModel):
+    username: str
+    email: str
+    company_name: str
+    company_website: Optional[str] = ""
+    designation: Optional[str] = ""
+    phone: Optional[str] = ""
+    location: Optional[str] = ""
+    message: Optional[str] = ""
+
 # ── Register ────────────────────────────────────────────
 @router.post("/register")
 def register(data: RegisterModel, response: Response):
@@ -79,7 +89,7 @@ def register(data: RegisterModel, response: Response):
         "created_at": datetime.utcnow().isoformat(),
     }
     db.vgulg_users.insert_one(new_user)
-    print(f"✅ New user registered: {foundation_id} | role: {role}")
+    print(f"[OK] New user registered: {foundation_id} | role: {role}")
     return {
         "status": True,
         "message": f"Registered successfully! {'You are the Admin.' if is_first else 'You can now log in.'}"
@@ -114,7 +124,7 @@ def login(data: LoginModel, response: Response):
         httponly=True, samesite="lax",
         max_age=86400
     )
-    print(f"✅ User logged in: {foundation_id}")
+    print(f"[OK] User logged in: {foundation_id}")
     return {"status": True, "message": "Login successful", "role": user["role"]}
 
 # ── Reset / Forgot Password ──────────────────────────────
@@ -153,3 +163,39 @@ def logout(response: Response):
 def get_me(request: Request):
     user = get_current_user(request)
     return {"status": True, "result": user}
+
+# ── Recruiter Apply ──────────────────────────────────────
+@router.post("/recruiter-apply")
+def recruiter_apply(data: RecruiterApplyModel):
+    try:
+        db = get_db()
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+
+    email = data.email.strip().lower()
+
+    # 1. Check if email already registered as user/recruiter/admin
+    if db.vgulg_users.find_one({"email": email}):
+        raise HTTPException(status_code=400, detail="This email is already registered as an account.")
+
+    # 2. Check if email already has a pending recruiter application
+    if db.recruiter_applications.find_one({"email": email, "status": "pending"}):
+        raise HTTPException(status_code=400, detail="A pending application already exists for this email.")
+
+    # 3. Create application
+    new_app = {
+        "_id": str(ObjectId()),
+        "username": data.username.strip(),
+        "email": email,
+        "company_name": data.company_name.strip(),
+        "company_website": (data.company_website or "").strip(),
+        "designation": (data.designation or "").strip(),
+        "phone": (data.phone or "").strip(),
+        "location": (data.location or "").strip(),
+        "message": (data.message or "").strip(),
+        "status": "pending",
+        "created_at": datetime.utcnow().isoformat(),
+    }
+    db.recruiter_applications.insert_one(new_app)
+    print(f"[OK] Recruiter application submitted: {email} | {data.company_name}")
+    return {"status": True, "message": "Application submitted successfully! Admin will review and provide credentials."}

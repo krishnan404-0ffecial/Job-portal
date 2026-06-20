@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useUserContext } from "../context/UserContext";
+import mLogo from "../assets/media/M-LOGO.jpg";
 
 const API = "http://localhost:8000/api/v1";
 
@@ -24,7 +25,7 @@ const Login = () => {
                 password: data.password,
             }, { withCredentials: true });
             Swal.fire({
-                icon: "success", title: "Welcome! 🎉",
+                icon: "success", title: "Welcome!",
                 text: res.data.message,
                 timer: 1500, showConfirmButton: false,
             });
@@ -49,16 +50,36 @@ const Login = () => {
                     <div className="left-blob lb2" />
                     <div className="left-content">
                         <div className="brand">
-                            <img src="/src/assets/media/vglug-logo.png" alt="VGLUG" style={{ width: "32px", height: "32px", borderRadius: "50%", verticalAlign: "middle", marginRight: "8px" }} />
+                            <img src={mLogo} alt="VGLUG" style={{ width: "32px", height: "32px", borderRadius: "50%", verticalAlign: "middle", marginRight: "8px" }} />
                             VGLUG Foundation
                         </div>
                         <h2>Internal Job Portal</h2>
                         <p>Exclusive access for verified VGLUG Foundation members. Connect, collaborate, and grow within the foundation ecosystem.</p>
                         <div className="features">
-                            <div className="feat"><span>🔐</span><span>Foundation ID verified access</span></div>
-                            <div className="feat"><span>💼</span><span>Internal jobs, internships & projects</span></div>
-                            <div className="feat"><span>🎯</span><span>Smart skill-based job matching</span></div>
-                            <div className="feat"><span>🛡️</span><span>Admin-controlled secure platform</span></div>
+                            <div className="feat">
+                                <span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="2"/><path d="M12 13v3"/></svg>
+                                </span>
+                                <span>Foundation ID verified access</span>
+                            </div>
+                            <div className="feat">
+                                <span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                </span>
+                                <span>Internal jobs, internships & projects</span>
+                            </div>
+                            <div className="feat">
+                                <span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                                </span>
+                                <span>Smart skill-based job matching</span>
+                            </div>
+                            <div className="feat">
+                                <span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                </span>
+                                <span>Admin-controlled secure platform</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,9 +87,11 @@ const Login = () => {
                 {/* Right Panel — Form */}
                 <div className="right-panel">
                     <div className="form-card">
-                        <div className="badge">
-                            <img src="/src/assets/media/vglug-logo.png" alt="VGLUG" style={{ width: "18px", height: "18px", borderRadius: "50%", verticalAlign: "middle", marginRight: "5px" }} />
-                            Member Login
+                        {/* Logo icon only at top — no text badge */}
+                        <div className="logo-top">
+                            <div className="logo-ring-top">
+                                <img src={mLogo} alt="VGLUG Foundation" className="logo-img-top" />
+                            </div>
                         </div>
                         <h1>Sign In</h1>
                         <p className="sub">Use your Foundation ID to access the portal</p>
@@ -78,7 +101,9 @@ const Login = () => {
                             <div className="field">
                                 <label>Foundation ID</label>
                                 <div className="input-wrap">
-                                    <span className="icon">🪪</span>
+                                    <span className="icon" style={{ display: "flex", alignItems: "center" }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ opacity: 0.6 }}><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M15 8h4M15 12h4M7 16h10"/></svg>
+                                    </span>
                                     <input
                                         type="text"
                                         placeholder="e.g. VGLUG-001"
@@ -86,7 +111,7 @@ const Login = () => {
                                         {...register("foundation_id", { required: "Foundation ID is required" })}
                                     />
                                 </div>
-                                {errors.foundation_id && <span className="err">⚠ {errors.foundation_id.message}</span>}
+                                {errors.foundation_id && <span className="err">{errors.foundation_id.message}</span>}
                             </div>
 
                             {/* Password */}
@@ -98,22 +123,28 @@ const Login = () => {
                                     </button>
                                 </div>
                                 <div className="input-wrap">
-                                    <span className="icon">🔒</span>
+                                    <span className="icon" style={{ display: "flex", alignItems: "center" }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ opacity: 0.6 }}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    </span>
                                     <input
                                         type={showPass ? "text" : "password"}
                                         placeholder="Enter your password"
                                         autoComplete="current-password"
                                         {...register("password", { required: "Password is required" })}
                                     />
-                                    <button type="button" className="eye" onClick={() => setShowPass(!showPass)} tabIndex={-1}>
-                                        {showPass ? "🙈" : "👁️"}
+                                    <button type="button" className="eye" onClick={() => setShowPass(!showPass)} tabIndex={-1} style={{ display: "flex", alignItems: "center" }}>
+                                        {showPass ? (
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                        ) : (
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        )}
                                     </button>
                                 </div>
-                                {errors.password && <span className="err">⚠ {errors.password.message}</span>}
+                                {errors.password && <span className="err">{errors.password.message}</span>}
                             </div>
 
                             <button type="submit" className="btn" disabled={isLoading}>
-                                {isLoading ? <><span className="spin" /> Signing in...</> : "Sign In →"}
+                                {isLoading ? <><span className="spin" /> Signing in...</> : "Sign In"}
                             </button>
                         </form>
 
@@ -121,7 +152,7 @@ const Login = () => {
                             New member? <Link to="/register">Create an account →</Link>
                         </p>
                         <div className="notice">
-                            🔒 Access restricted to VGLUG Foundation members only
+                            Access restricted to VGLUG Foundation members only
                         </div>
                     </div>
                 </div>
@@ -245,7 +276,28 @@ const Wrapper = styled.div`
     }
     .form-card { width: 100%; max-width: 420px; }
 
-    .badge { display: inline-block; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #d97706; font-size: 13px; font-weight: 700; padding: 5px 16px; border-radius: 999px; margin-bottom: 16px; }
+    /* ── Logo icon at top of form ── */
+    .logo-top {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 20px;
+    }
+    .logo-ring-top {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        padding: 3px;
+        background: linear-gradient(135deg, #ffffff, #e8edf5);
+        border: 2px solid #d1d9ef;
+        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.14), 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .logo-img-top {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+    }
     h1 { font-size: 28px; font-weight: 900; color: #111; letter-spacing: -0.5px; margin-bottom: 6px; }
     .sub { font-size: 13.5px; color: #6b7280; margin-bottom: 28px; }
 

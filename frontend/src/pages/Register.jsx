@@ -49,7 +49,7 @@ const Register = () => {
         <Wrapper>
             <div className="container">
                 <div className="logo-wrap">
-                    <img src="/src/assets/media/vglug-logo.png" alt="VGLUG Foundation" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
+                    <img src="/src/assets/media/M-LOGO.jpg" alt="VGLUG Foundation" style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
                     <span className="logo-text">VGLUG Foundation</span>
                 </div>
                 <h1>Create Account</h1>
@@ -66,7 +66,7 @@ const Register = () => {
 
                     {/* Foundation ID */}
                     <div className="field">
-                        <label>Foundation ID <span className="badge">🪪 Your ID</span></label>
+                        <label>Foundation ID <span className="badge">Your Unique ID</span></label>
                         <input type="text" placeholder="e.g. VGLUG-001" autoComplete="off"
                             {...register("foundation_id", { required: "Foundation ID is required" })} />
                         {errors.foundation_id && <span className="err">{errors.foundation_id.message}</span>}
@@ -108,8 +108,11 @@ const Register = () => {
                 <p className="footer-link">
                     Already have an account? <Link to="/login">Login now</Link>
                 </p>
+                <p className="footer-link" style={{ marginTop: "6px" }}>
+                    Are you a Recruiter? <Link to="/recruiter-apply">Apply for Access →</Link>
+                </p>
                 <div className="notice">
-                    ℹ️ Choose a unique Foundation ID for your account. After registering, use it to login.
+                    Choose a unique Foundation ID for your account. After registering, use it to login.
                 </div>
             </div>
         </Wrapper>

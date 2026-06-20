@@ -22,6 +22,11 @@ const Admin = () => {
     const [activeTab, setActiveTab] = useState("overview");
     const [appFilter, setAppFilter] = useState("all");
 
+    // Recruiter applications states
+    const [selectedRecApp, setSelectedRecApp] = useState(null);
+    const [assignedFID, setAssignedFID] = useState("");
+    const [assignedPass, setAssignedPass] = useState("");
+
     // Create Recruiter form
     const { register: regR, handleSubmit: hsR, reset: resetR, formState: { errors: errR } } = useForm();
     const [recLoading, setRecLoading] = useState(false);
@@ -30,6 +35,13 @@ const Admin = () => {
     const { data: stats, isPending: statsLoading } = useQuery({
         queryKey: ["admin_stats"],
         queryFn: () => fetcher(`${API}/admin/stats`),
+    });
+
+    // Recruiter Applications
+    const { data: recAppsData } = useQuery({
+        queryKey: ["admin_recruiter_applications"],
+        queryFn: () => fetcher(`${API}/admin/recruiter-applications`),
+        enabled: activeTab === "recruiter-applications",
     });
 
     // All Users
@@ -95,6 +107,55 @@ const Admin = () => {
         onError: (e) => Swal.fire("Error", e?.response?.data?.detail || "Failed.", "error"),
     });
 
+    // Recruiter Action Mutation (Approve / Reject)
+    const recruiterActionMutation = useMutation({
+        mutationFn: ({ application_id, action, foundation_id, password }) =>
+            axios.post(`${API}/admin/recruiter-applications/action`, {
+                application_id, action, foundation_id, password
+            }, { withCredentials: true }),
+        onSuccess: (_, vars) => {
+            const label = vars.action === "approve" ? "✅ Recruiter Approved!" : "❌ Recruiter Rejected";
+            Swal.fire({ icon: "success", title: label, text: vars.action === "approve" ? `Account ${vars.foundation_id} created successfully.` : "Application rejected.", timer: 2000, showConfirmButton: false });
+            qc.invalidateQueries(["admin_recruiter_applications"]);
+            qc.invalidateQueries(["admin_stats"]);
+            qc.invalidateQueries(["admin_users"]);
+        },
+        onError: (e) => Swal.fire("Error", e?.response?.data?.detail || "Failed to process recruiter request.", "error"),
+    });
+
+    const handleRejectRecruiter = (appId, name) => {
+        Swal.fire({
+            title: `Reject application from "${name}"?`,
+            text: "This will mark their application as rejected.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: "Yes, reject!",
+        }).then(r => {
+            if (r.isConfirmed) {
+                recruiterActionMutation.mutate({ application_id: appId, action: "reject" });
+            }
+        });
+    };
+
+    const openApproveModal = (app) => {
+        setSelectedRecApp(app);
+        // Generate a random password of length 8 (letters + numbers)
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let pass = "";
+        for (let i = 0; i < 8; i++) {
+            pass += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        setAssignedPass(pass);
+
+        // Fetch a sequential ID or search stats for recruiter count
+        const recCount = stats?.result?.recruiters || 0;
+        const nextIdNum = recCount + 1;
+        const idPadding = nextIdNum < 10 ? `00${nextIdNum}` : nextIdNum < 100 ? `0${nextIdNum}` : nextIdNum;
+        setAssignedFID(`VGLUG-REC-${idPadding}`);
+    };
+
     const confirmDeleteApp = (app_id, username) => {
         Swal.fire({
             title: `Delete application by "${username}"?`,
@@ -140,7 +201,7 @@ const Admin = () => {
         { label: "Declined",           value: s.declined_apps,      color: "#ef4444", icon: "❌" },
     ];
 
-    const tabs = ["overview", "applications", "users", "create-recruiter"];
+    const tabs = ["overview", "applications", "users", "create-recruiter", "recruiter-applications"];
 
     // ── Create Recruiter submit ────────────────────────────
     const onCreateRecruiter = async (data) => {
@@ -172,7 +233,7 @@ const Admin = () => {
     return (
         <Wrapper>
             <div className="header">
-                <h2>🛡️ Admin Control Panel</h2>
+                <h2>Admin Control Panel</h2>
                 <p>Manage members, job applications, roles, and admissions</p>
             </div>
 
@@ -184,13 +245,36 @@ const Admin = () => {
                         className={`tab ${activeTab === t ? "active" : ""}`}
                         onClick={() => setActiveTab(t)}
                     >
-                        {t === "overview"
-                            ? "📊 Overview"
-                            : t === "applications"
-                            ? `📋 Applications (${s.total_applications || 0})`
-                            : t === "users"
-                            ? "👥 All Members"
-                            : "🧑‍💼 Add Recruiter"}
+                        {t === "overview" && (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                                Overview
+                            </span>
+                        )}
+                        {t === "applications" && (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                Applications ({s.total_applications || 0})
+                            </span>
+                        )}
+                        {t === "users" && (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                All Members
+                            </span>
+                        )}
+                        {t === "create-recruiter" && (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
+                                Add Recruiter
+                            </span>
+                        )}
+                        {t === "recruiter-applications" && (
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                Recruiter Requests ({s.recruiter_applications_count || 0})
+                            </span>
+                        )}
                     </button>
                 ))}
             </div>
@@ -447,9 +531,182 @@ const Admin = () => {
                 </div>
             )}
 
+            {/* ── RECRUITER APPLICATIONS ── */}
+            {activeTab === "recruiter-applications" && (
+                <div className="section">
+                    <div className="apps-header">
+                        <h3>💼 Recruiter Access Requests</h3>
+                    </div>
+
+                    {!recAppsData?.result?.length ? (
+                        <div className="empty">📭 No recruiter applications found.</div>
+                    ) : (
+                        <div className="app-table-wrap">
+                            <table className="app-table">
+                                <thead>
+                                    <tr>
+                                        <th>Applicant Name</th>
+                                        <th>Work Email</th>
+                                        <th>Company</th>
+                                        <th>Designation</th>
+                                        <th>Location</th>
+                                        <th>Phone</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {recAppsData.result.map((app) => {
+                                        const isPending = app.status === "pending";
+                                        const statusBg = app.status === "approved" ? "#d1fae5" : app.status === "rejected" ? "#fee2e2" : "#fef3c7";
+                                        const statusColor = app.status === "approved" ? "#065f46" : app.status === "rejected" ? "#991b1b" : "#92400e";
+                                        return (
+                                            <tr key={app._id}>
+                                                <td className="applicant-name">
+                                                    <div>{app.username}</div>
+                                                    <span style={{ fontSize: "11px", color: "#6b7280" }}>Applied: {new Date(app.created_at).toLocaleDateString()}</span>
+                                                </td>
+                                                <td>{app.email}</td>
+                                                <td>
+                                                    <div>{app.company_name}</div>
+                                                    {app.company_website && (
+                                                        <a href={app.company_website} target="_blank" rel="noreferrer" style={{ fontSize: "11px", color: "#4f6ef7", textDecoration: "underline" }}>Website</a>
+                                                    )}
+                                                </td>
+                                                <td>{app.designation || "—"}</td>
+                                                <td>{app.location || "—"}</td>
+                                                <td>{app.phone || "—"}</td>
+                                                <td>
+                                                    <span className="status-pill" style={{ background: statusBg, color: statusColor }}>
+                                                        {app.status}
+                                                    </span>
+                                                    {app.status === "approved" && app.assigned_foundation_id && (
+                                                        <div style={{ fontSize: "11px", color: "#6b7280", marginTop: "4px" }}>
+                                                            ID: <strong>{app.assigned_foundation_id}</strong>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td className="acts">
+                                                    {isPending ? (
+                                                        <>
+                                                            <button
+                                                                className="act-btn admit"
+                                                                onClick={() => openApproveModal(app)}
+                                                            >
+                                                                ✅ Approve
+                                                            </button>
+                                                            <button
+                                                                className="act-btn decline"
+                                                                onClick={() => handleRejectRecruiter(app._id, app.username)}
+                                                            >
+                                                                ❌ Reject
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <span style={{ fontSize: "12px", color: "#9ca3af" }}>Processed</span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* ── APPROVAL CREDENTIALS MODAL ── */}
+            {selectedRecApp && (
+                <ModalOverlay onClick={(e) => e.target === e.currentTarget && setSelectedRecApp(null)}>
+                    <ModalCard>
+                        <div className="modal-header">
+                            <h3>🔑 Assign Recruiter Credentials</h3>
+                            <button className="close-btn" onClick={() => setSelectedRecApp(null)}>✕</button>
+                        </div>
+                        <p className="modal-sub">
+                            Approve application from <strong>{selectedRecApp.username}</strong> ({selectedRecApp.company_name}).
+                            Provide their official login details below.
+                        </p>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                            <div className="field">
+                                <label style={{ fontSize: "12.5px", fontWeight: "700", color: "#374151" }}>Assign Foundation ID</label>
+                                <input
+                                    type="text"
+                                    className="modal-input"
+                                    value={assignedFID}
+                                    onChange={(e) => setAssignedFID(e.target.value)}
+                                    style={{ padding: "11px 14px", border: "1.5px solid #e5e7eb", borderRadius: "10px", fontSize: "14px", width: "100%" }}
+                                />
+                            </div>
+
+                            <div className="field">
+                                <label style={{ fontSize: "12.5px", fontWeight: "700", color: "#374151" }}>Assign Login Password</label>
+                                <input
+                                    type="text"
+                                    className="modal-input"
+                                    value={assignedPass}
+                                    onChange={(e) => setAssignedPass(e.target.value)}
+                                    style={{ padding: "11px 14px", border: "1.5px solid #e5e7eb", borderRadius: "10px", fontSize: "14px", width: "100%" }}
+                                />
+                            </div>
+
+                            <div className="modal-actions" style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
+                                <button
+                                    className="rec-btn"
+                                    onClick={() => {
+                                        recruiterActionMutation.mutate({
+                                            application_id: selectedRecApp._id,
+                                            action: "approve",
+                                            foundation_id: assignedFID,
+                                            password: assignedPass
+                                        });
+                                        setSelectedRecApp(null);
+                                    }}
+                                    disabled={recruiterActionMutation.isPending}
+                                    style={{ flex: 1 }}
+                                >
+                                    Admit & Send Credentials
+                                </button>
+                                <button
+                                    className="tab"
+                                    onClick={() => setSelectedRecApp(null)}
+                                    style={{ margin: 0, padding: "12px 20px" }}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </ModalCard>
+                </ModalOverlay>
+            )}
+
         </Wrapper>
     );
 };
+
+const ModalOverlay = styled.div`
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    animation: fadeIn 0.2s ease;
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+`;
+
+const ModalCard = styled.div`
+    background: #fff; border-radius: 20px;
+    padding: 36px 40px; width: 100%; max-width: 440px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+    animation: slideUp 0.25s ease;
+    @keyframes slideUp { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .modal-header h3 { font-size: 19px; font-weight: 800; color: #111; }
+    .close-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #6b7280; padding: 4px 8px; border-radius: 6px; }
+    .close-btn:hover { background: #f3f4f6; color: #111; }
+    .modal-sub { font-size: 13px; color: #6b7280; margin-bottom: 20px; }
+`;
 
 const Wrapper = styled.section`
     padding: 8px 0 40px;

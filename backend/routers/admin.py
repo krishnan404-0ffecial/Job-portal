@@ -31,6 +31,12 @@ class CreateRecruiterModel(BaseModel):
     designation: Optional[str] = ""
     company_website: Optional[str] = ""
 
+class RecruiterAppActionModel(BaseModel):
+    application_id: str
+    action: str  # "approve" | "reject"
+    foundation_id: Optional[str] = ""
+    password: Optional[str] = ""
+
 # ── Admin: Create Recruiter Account ──────────────────────
 @router.post("/create-recruiter")
 def create_recruiter(data: CreateRecruiterModel, request: Request):
@@ -96,6 +102,7 @@ def get_stats(request: Request):
         "declined_apps": db.vgulg_applications.count_documents({"status": "declined"}),
         "accepted_apps": db.vgulg_applications.count_documents({"status": "accepted"}),
         "foundation_ids_count": db.foundation_ids.count_documents({}),
+        "recruiter_applications_count": db.recruiter_applications.count_documents({"status": "pending"}),
     }
     return {"status": True, "result": stats}
 
@@ -187,3 +194,78 @@ def delete_any_job(job_id: str, request: Request):
     db = get_db()
     db.vgulg_jobs.delete_one({"_id": job_id})
     return {"status": True, "message": "Job deleted by admin."}
+
+# ── Recruiter Applications List ──────────────────────────
+@router.get("/recruiter-applications")
+def get_recruiter_applications(request: Request):
+    require_admin(request)
+    db = get_db()
+    apps = list(db.recruiter_applications.find({}).sort("created_at", -1))
+    return {"status": True, "result": apps}
+
+# ── Recruiter Application Action ────────────────────────
+@router.post("/recruiter-applications/action")
+def action_recruiter_application(data: RecruiterAppActionModel, request: Request):
+    require_admin(request)
+    db = get_db()
+
+    app = db.recruiter_applications.find_one({"_id": data.application_id})
+    if not app:
+        raise HTTPException(status_code=404, detail="Recruiter application not found.")
+
+    if data.action == "reject":
+        db.recruiter_applications.update_one(
+            {"_id": data.application_id},
+            {"$set": {"status": "rejected"}}
+        )
+        return {"status": True, "message": "Application rejected successfully."}
+
+    elif data.action == "approve":
+        if not data.foundation_id or not data.password:
+            raise HTTPException(status_code=400, detail="Foundation ID and Password are required to approve.")
+
+        foundation_id = data.foundation_id.strip().upper()
+
+        # Check if foundation_id or email already registered
+        if db.vgulg_users.find_one({"foundation_id": foundation_id}):
+            raise HTTPException(status_code=400, detail="This Foundation ID is already in use.")
+
+        email = app["email"].strip().lower()
+        if db.vgulg_users.find_one({"email": email}):
+            raise HTTPException(status_code=400, detail="This email is already registered as an account.")
+
+        if len(data.password) < 6:
+            raise HTTPException(status_code=400, detail="Password must be at least 6 characters.")
+
+        # Create recruiter user account
+        new_recruiter = {
+            "_id": str(ObjectId()),
+            "username": app["username"].strip(),
+            "foundation_id": foundation_id,
+            "email": email,
+            "password": pwd_ctx.hash(data.password),
+            "role": "recruiter",
+            "is_approved": True,
+            "skills": [],
+            "education": "",
+            "experience": "",
+            "location": app.get("location", "").strip(),
+            "resume": "",
+            "bio": app.get("message", "").strip(),
+            "company_name": app["company_name"].strip(),
+            "company_website": app.get("company_website", "").strip(),
+            "designation": app.get("designation", "").strip(),
+            "phone": app.get("phone", "").strip(),
+            "created_at": datetime.utcnow().isoformat(),
+        }
+        db.vgulg_users.insert_one(new_recruiter)
+
+        # Update application status
+        db.recruiter_applications.update_one(
+            {"_id": data.application_id},
+            {"$set": {"status": "approved", "assigned_foundation_id": foundation_id}}
+        )
+        print(f"✅ Recruiter approved by admin: {foundation_id} for email: {email}")
+        return {"status": True, "message": f"Recruiter approved! Account {foundation_id} created."}
+
+    raise HTTPException(status_code=400, detail="Invalid action. Use 'approve' or 'reject'.")

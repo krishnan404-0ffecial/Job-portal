@@ -3,9 +3,8 @@ import styled from "styled-components";
 
 import { TfiLocationPin } from "react-icons/tfi";
 import { BsFillBriefcaseFill } from "react-icons/bs";
-import { TbTargetArrow } from "react-icons/tb";
-import { FaRegCalendarAlt } from "react-icons/fa";
-import { FiLock, FiFileText } from "react-icons/fi";
+import { FaRegCalendarAlt, FaRupeeSign } from "react-icons/fa";
+import { FiFileText, FiLock, FiEdit2 } from "react-icons/fi";
 
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import dayjs from "dayjs";
@@ -18,78 +17,109 @@ const JobCard = ({ job }) => {
     const date = dayjs(job?.job_deadline).format("MMM Do, YYYY");
     const { user } = useUserContext();
     const navigate = useNavigate();
-
-    // User is considered logged in if they have an email field
     const isLoggedIn = user && user.email;
 
+    const statusColor = {
+        open: "#16a34a",
+        closed: "#64748b",
+        pending: "#d97706",
+    };
+    const statusBg = {
+        open: "#dcfce7",
+        closed: "#f1f5f9",
+        pending: "#fef3c7",
+    };
+
+    const initials = job?.company?.slice(0, 2).toUpperCase() || "?";
+    const colorPalette = ["#4f6ef7", "#8b5cf6", "#f97316", "#10b981", "#ef4444", "#3b82f6"];
+    const colorIndex = (job?.company?.charCodeAt(0) || 0) % colorPalette.length;
+    const avatarColor = colorPalette[colorIndex];
+
     return (
-        <Wrapper>
-            <div className="card-container">
-                <div className="card-header">
-                    <div className="logo">
-                        <span>{job?.company?.charAt(0)}</span>
-                    </div>
-                    <div className="right">
-                        <h2 className="title">{job?.position}</h2>
-                        <h4 className="company">- {job?.company}</h4>
-                    </div>
-                </div>
+        <Wrapper avatarColor={avatarColor}>
+            <div className="card">
+                {/* Left avatar */}
+                <div className="avatar">{initials}</div>
 
-                <div className="middle-row">
-                    <div className="location" title="Deadline">
-                        <FaRegCalendarAlt className="mr-2 text-lg" />
-                        <span>{date}</span>
-                    </div>
-                    <div className="location">
-                        <TfiLocationPin className="mr-2 text-lg" />
-                        <span>{job?.job_location}</span>
-                    </div>
-                    <div className="type">
-                        <BsFillBriefcaseFill className="mr-2 text-lg" />
-                        <span className="capitalize">{job?.job_type}</span>
-                    </div>
-                    <div className="status capitalize">
-                        <TbTargetArrow className="mr-2 text-lg" />
-                        <span className={job?.status}>{job?.status}</span>
-                    </div>
-                </div>
-
-                <div className="end-row">
-                    <Link to={`/job/${job._id}`} className="detail-btn">
-                        Details
-                    </Link>
-
-                    {/* Apply → always navigate to detail page for resume upload */}
-                    {isLoggedIn ? (
-                        <Link
-                            to={`/job/${job._id}`}
-                            className="apply-btn"
-                            title="Upload resume & apply from the detail page"
+                {/* Main content */}
+                <div className="content">
+                    <div className="top-row">
+                        <div className="title-group">
+                            <h2 className="position">{job?.position}</h2>
+                            <span className="company">{job?.company}</span>
+                        </div>
+                        <span
+                            className="status-badge"
+                            style={{
+                                color: statusColor[job?.status] || "#64748b",
+                                background: statusBg[job?.status] || "#f1f5f9",
+                            }}
                         >
-                            <FiFileText className="btn-icon" /> Apply
-                        </Link>
-                    ) : (
-                        <button
-                            className="login-apply-btn"
-                            onClick={() =>
-                                navigate("/login", { state: { from: `/job/${job._id}` } })
-                            }
-                            title="Login or Register to apply for this job"
-                        >
-                            <FiLock className="lock-icon" />
-                            Login to Apply
-                        </button>
+                            {job?.status}
+                        </span>
+                    </div>
+
+                    <div className="meta-row">
+                        <span className="meta-item">
+                            <TfiLocationPin />
+                            {job?.job_location}
+                        </span>
+                        <span className="meta-item">
+                            <BsFillBriefcaseFill />
+                            {job?.job_type}
+                        </span>
+                        <span className="meta-item">
+                            <FaRegCalendarAlt />
+                            {date}
+                        </span>
+                        {job?.job_salary && (
+                            <span className="meta-item salary">
+                                <FaRupeeSign />
+                                {job?.job_salary}
+                            </span>
+                        )}
+                    </div>
+
+                    {job?.job_skills?.length > 0 && (
+                        <div className="skills-row">
+                            {job.job_skills.slice(0, 4).map((skill, i) => (
+                                <span key={i} className="skill-chip">{skill}</span>
+                            ))}
+                            {job.job_skills.length > 4 && (
+                                <span className="skill-chip more">+{job.job_skills.length - 4}</span>
+                            )}
+                        </div>
                     )}
 
-                    {/* Edit button for job owner */}
-                    {isLoggedIn && user?._id === job?.created_by && (
-                        <Link
-                            to={`/dashboard/edit-job/${job._id}`}
-                            className="detail-btn"
-                        >
-                            Edit
+                    <div className="action-row">
+                        <Link to={`/job/${job._id}`} className="btn btn-outline">
+                            Details
                         </Link>
-                    )}
+
+                        {isLoggedIn ? (
+                            <Link
+                                to={`/job/${job._id}`}
+                                className="btn btn-primary"
+                                title="Upload resume & apply from the detail page"
+                            >
+                                <FiFileText /> Apply
+                            </Link>
+                        ) : (
+                            <button
+                                className="btn btn-ghost"
+                                onClick={() => navigate("/login", { state: { from: `/job/${job._id}` } })}
+                                title="Login to apply"
+                            >
+                                <FiLock /> Login to Apply
+                            </button>
+                        )}
+
+                        {isLoggedIn && user?._id === job?.created_by && (
+                            <Link to={`/dashboard/edit-job/${job._id}`} className="btn btn-edit">
+                                <FiEdit2 /> Edit
+                            </Link>
+                        )}
+                    </div>
                 </div>
             </div>
         </Wrapper>
@@ -98,153 +128,202 @@ const JobCard = ({ job }) => {
 
 const Wrapper = styled.div`
     width: 100%;
-    height: 100%;
-    margin: 0 auto;
 
-    .card-container {
+    .card {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        background: #ffffff;
+        border: 1px solid #d1d9f0;
+        border-left: 4px solid transparent;
+        border-radius: 10px;
+        padding: 12px 14px;
+        transition: box-shadow 0.22s ease, transform 0.22s ease, border-left-color 0.22s ease;
         height: 100%;
-        box-shadow: 0 4px 4px var(--shadow-medium),
-            0 -2px 6px var(--shadow-medium);
-        border-radius: 4px;
-        padding: 2rem 1.5rem;
+        box-sizing: border-box;
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.07), 0 1px 2px rgba(0,0,0,0.05);
     }
-    .card-container .card-header {
+    .card:hover {
+        box-shadow: 0 8px 32px rgba(99, 102, 241, 0.16), 0 2px 8px rgba(0,0,0,0.08);
+        border-left-color: #4f6ef7;
+        transform: translateY(-3px);
+    }
+
+    /* Avatar */
+    .avatar {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: ${({ avatarColor }) => avatarColor || "#4f6ef7"};
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
         display: flex;
-        justify-content: flex-start;
         align-items: center;
-    }
-    .card-container .logo {
-        margin-right: 18px;
-        width: 50px;
-        height: 50px;
-        border-radius: 3px;
-        background-color: #fb891f;
-        display: flex;
         justify-content: center;
-        align-items: center;
-        color: var(--color-white);
-        font-size: 30px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Content */
+    .content {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .top-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .title-group {
+        min-width: 0;
+    }
+
+    .position {
+        font-size: 13px;
+        font-weight: 700;
+        color: #0f172a;
+        text-transform: capitalize;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.3;
+    }
+    .company {
+        font-size: 11px;
+        color: #64748b;
+        font-weight: 500;
+        text-transform: capitalize;
+        display: block;
+        margin-top: 1px;
+    }
+
+    .status-badge {
+        flex-shrink: 0;
+        font-size: 9.5px;
         font-weight: 700;
         text-transform: uppercase;
-        flex-shrink: 0;
-    }
-    .right .title {
-        text-transform: capitalize;
-        font-size: calc(15px + 0.3vw);
-        font-weight: 600;
-        color: var(--color-black);
-        line-height: 24px;
-    }
-    .right .company {
-        display: inline-block;
-        text-transform: capitalize;
-        font-size: calc(11px + 0.15vw);
-        font-weight: 600;
-        color: var(--color-black);
-        letter-spacing: 1px;
-        padding: 1px 2px;
-        border-radius: 4px;
-    }
-    @media screen and (max-width: 550px) {
-        .right .title { line-height: 18px; }
+        letter-spacing: 0.5px;
+        padding: 2px 7px;
+        border-radius: 99px;
+        white-space: nowrap;
     }
 
-    .middle-row {
-        margin-top: 20px;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-row-gap: calc(0.6rem + 0.09vw);
-        align-items: center;
-    }
-    .location,
-    .type,
-    .status {
+    /* Meta row */
+    .meta-row {
         display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        font-size: 14px;
-    }
-    .status span {
-        background-color: #fefe7d;
-        padding: 2px 15px;
-        border-radius: 6px;
-        text-transform: uppercase;
-        font-size: 12.5px;
-        font-weight: 400;
-        letter-spacing: 1px;
-    }
-    .status span.open     { background-color: #a0ffa3; }
-    .status span.pending  { background-color: #fefe7d; }
-    .status span.declined { background-color: #feb69a; }
-    .status span.closed   { background-color: #ddd; }
-
-    .end-row {
-        margin-top: calc(18px + 0.4vw);
-        display: flex;
-        align-items: center;
-        gap: 10px;
         flex-wrap: wrap;
+        gap: 4px 10px;
+        align-items: center;
     }
-    .end-row .detail-btn {
-        padding: 5px 18px;
-        text-transform: capitalize;
-        background-color: var(--color-black);
-        color: var(--color-white);
-        border-radius: 4px;
-        letter-spacing: 1px;
-        font-size: 14px;
-        font-weight: 500;
-        transition: all 0.3s linear;
-        border: none;
-        text-decoration: none;
-    }
-    .end-row .detail-btn:hover {
-        background-color: var(--color-accent);
-    }
-    .end-row .apply-btn {
+    .meta-item {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 5px 18px;
-        text-transform: capitalize;
-        background-color: var(--color-accent);
-        color: var(--color-white);
-        border-radius: 4px;
-        letter-spacing: 1px;
-        font-size: 14px;
+        gap: 3px;
+        font-size: 10.5px;
+        color: #64748b;
         font-weight: 500;
-        transition: all 0.3s linear;
+
+        svg {
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+    }
+    .meta-item.salary {
+        color: #16a34a;
+        font-weight: 600;
+    }
+
+    /* Skills chips */
+    .skills-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        align-items: center;
+    }
+    .skill-chip {
+        font-size: 9.5px;
+        font-weight: 600;
+        color: #4f6ef7;
+        background: rgba(79, 110, 247, 0.08);
+        border: 1px solid rgba(79, 110, 247, 0.18);
+        border-radius: 5px;
+        padding: 1px 6px;
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
+    .skill-chip.more {
+        color: #94a3b8;
+        background: #f1f5f9;
+        border-color: #e2e8f0;
+    }
+
+    /* Action buttons */
+    .action-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        align-items: center;
+        margin-top: 1px;
+    }
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 11px;
+        border-radius: 6px;
         border: none;
-        outline: none;
         cursor: pointer;
         text-decoration: none;
-    }
-    .end-row .apply-btn:hover { background-color: var(--color-black); }
-    .btn-icon { font-size: 13px; }
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        line-height: 1;
 
-    /* Guest "Login to Apply" button */
-    .end-row .login-apply-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 14px;
-        background-color: transparent;
-        color: #e87d2c;
-        border: 1.5px solid #e87d2c;
-        border-radius: 4px;
-        letter-spacing: 0.5px;
-        font-size: 13px;
-        font-weight: 600;
-        transition: all 0.25s ease;
-        cursor: pointer;
-        outline: none;
+        svg { font-size: 10px; }
     }
-    .end-row .login-apply-btn:hover {
-        background-color: #e87d2c;
+    .btn-outline {
+        background: transparent;
+        color: #0f172a;
+        border: 1.5px solid #cbd5e1;
+    }
+    .btn-outline:hover {
+        background: #0f172a;
+        color: #fff;
+        border-color: #0f172a;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #4f6ef7, #3a57e8);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(79, 110, 247, 0.3);
+    }
+    .btn-primary:hover {
+        box-shadow: 0 4px 16px rgba(79, 110, 247, 0.45);
+        transform: translateY(-1px);
+    }
+    .btn-ghost {
+        background: transparent;
+        color: #4f6ef7;
+        border: 1.5px solid #4f6ef7;
+    }
+    .btn-ghost:hover {
+        background: #4f6ef7;
         color: #fff;
     }
-    .end-row .login-apply-btn .lock-icon {
-        font-size: 13px;
+    .btn-edit {
+        background: #f8faff;
+        color: #4f6ef7;
+        border: 1.5px solid rgba(79, 110, 247, 0.25);
+    }
+    .btn-edit:hover {
+        background: rgba(79, 110, 247, 0.08);
     }
 `;
 

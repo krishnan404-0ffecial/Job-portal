@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Job_Status, Job_Type, Job_Sort_By } from "../../utils/JobData";
 
-import { CiFilter } from "react-icons/ci";
 import { CiSearch } from "react-icons/ci";
+import { MdFilterList } from "react-icons/md";
 import { useJobContext } from "../../context/JobContext";
 
 const SearchAndFilter = () => {
@@ -15,194 +15,220 @@ const SearchAndFilter = () => {
     const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
-        const baseUrl =
-            "http://localhost:8000/api/v1/jobs/all?page=1&limit=10";
+        const baseUrl = "http://localhost:8000/api/v1/jobs/all?page=1&limit=10";
         let url = baseUrl;
         const queryParams = {};
 
-        if (searchQuery) {
-            queryParams.search = searchQuery;
-        }
-        if (typeFilter) {
-            queryParams.job_type = typeFilter;
-        }
-        if (statusFilter) {
-            queryParams.status = statusFilter;
-        }
-        // Constructing query string
-        const queryString = new URLSearchParams(queryParams).toString();
+        if (searchQuery) queryParams.search = searchQuery;
+        if (typeFilter) queryParams.job_type = typeFilter;
+        if (statusFilter) queryParams.status = statusFilter;
 
-        if (queryString) {
-            url += `&${queryString}`;
-        }
+        const queryString = new URLSearchParams(queryParams).toString();
+        if (queryString) url += `&${queryString}`;
+
         handleJobFetch(url);
     }, [typeFilter, statusFilter, sortBy, searchQuery]);
 
     return (
         <Wrapper>
-            <form action="" className="form">
-                <div className="filter">
-                    <div className="hidden">
-                        <CiFilter />
-                    </div>
-                    <div className="type-row">
-                        <span className="text">Types</span>
-                        <select
-                            className="type-select"
-                            onChange={(e) => setTypeFilter(e.target.value)}
-                            value={typeFilter}
-                        >
-                            <option value="">default</option>
-                            {Job_Type?.map((type, i) => {
-                                return (
-                                    <option key={i + type} value={type}>
-                                        {type}
-                                    </option>
-                                );
-                            })}
-                        </select>
-                    </div>
-                    <div className="status-row">
-                        <span className="text">Status</span>
-                        <select
-                            className="status-select"
-                            onChange={(e) => setStatusFilter(e.target.value)}
-                            value={statusFilter}
-                        >
-                            <option value="">default</option>
-                            {Job_Status?.map((type, i) => {
-                                return (
-                                    <option key={i + type} value={type}>
-                                        {type}
-                                    </option>
-                                );
-                            })}
-                        </select>
-                    </div>
-                    <div className="status-row">
-                        <span className="text">Sort By</span>
-                        <select
-                            className="status-select"
-                            onChange={(e) => setSortBy(e.target.value)}
-                            value={sortBy}
-                        >
-                            <option value="">default</option>
-                            {Job_Sort_By?.map((type, i) => {
-                                return (
-                                    <option key={i + type} value={type}>
-                                        {type}
-                                    </option>
-                                );
-                            })}
-                        </select>
-                    </div>
+            {/* Search bar */}
+            <div className="search-box">
+                <CiSearch className="search-icon" />
+                <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search by job title or company..."
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    value={searchQuery}
+                />
+            </div>
+
+            {/* Filters */}
+            <div className="filters">
+                <span className="filter-label">
+                    <MdFilterList /> Filters:
+                </span>
+
+                <div className="filter-group">
+                    <label className="filter-item-label">Type</label>
+                    <select
+                        className="filter-select"
+                        onChange={(e) => setTypeFilter(e.target.value)}
+                        value={typeFilter}
+                    >
+                        <option value="">All</option>
+                        {Job_Type?.map((type, i) => (
+                            <option key={i} value={type}>{type}</option>
+                        ))}
+                    </select>
                 </div>
 
-                <div className="search-row">
-                    <input
-                        type="text"
-                        name=""
-                        id=""
-                        className="search"
-                        placeholder="Type Job Title"
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        value={searchQuery}
-                    />
-                    <span className="icon">
-                        <CiSearch />
-                    </span>
+                <div className="filter-group">
+                    <label className="filter-item-label">Status</label>
+                    <select
+                        className="filter-select"
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        value={statusFilter}
+                    >
+                        <option value="">All</option>
+                        {Job_Status?.map((type, i) => (
+                            <option key={i} value={type}>{type}</option>
+                        ))}
+                    </select>
                 </div>
-            </form>
+
+                <div className="filter-group">
+                    <label className="filter-item-label">Sort</label>
+                    <select
+                        className="filter-select"
+                        onChange={(e) => setSortBy(e.target.value)}
+                        value={sortBy}
+                    >
+                        <option value="">Default</option>
+                        {Job_Sort_By?.map((type, i) => (
+                            <option key={i} value={type}>{type}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {(typeFilter || statusFilter || sortBy || searchQuery) && (
+                    <button
+                        className="clear-btn"
+                        onClick={() => {
+                            setTypeFilter("");
+                            setStatusFilter("");
+                            setSortBy("");
+                            setSearchQuery("");
+                        }}
+                    >
+                        Clear
+                    </button>
+                )}
+            </div>
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-    background-color: #f8f4f4;
-    padding: 1.2rem 1rem;
+    width: 100%;
     display: flex;
-    align-items: center;
-    border-radius: 6px;
-    .form {
+    flex-direction: column;
+    gap: 10px;
+
+    /* ── Search box ── */
+    .search-box {
+        position: relative;
         width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
     }
-    .filter {
-        display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        align-items: center;
-        column-gap: 1.1rem;
+    .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 19px;
+        color: #94a3b8;
+        pointer-events: none;
     }
-    .hidden {
-        display: inline-block;
-    }
-    @media screen and (max-width: 778px) {
-        .form {
-            flex-direction: column;
-            row-gap: 1rem;
-        }
-        .filter {
-            justify-content: center;
-            row-gap: 0.75rem;
-        }
-        .hidden {
-            display: none;
-        }
-    }
-    .type-row,
-    .status-row {
-        display: flex;
-        align-items: center;
-    }
-    .text {
-        font-size: 13px;
-        font-weight: 400;
-        color: var(--color-black);
-        opacity: 0.75;
-        /* margin-right: 5px; */
-        background-color: #e4e4e4;
-        height: 100%;
-        padding: 2px 5px;
-    }
-    .type-select,
-    .status-select {
-        text-transform: capitalize;
-        padding: 1px 4px;
+    .search-input {
+        width: 100%;
+        padding: 8px 16px 8px 42px;
+        font-size: 13.5px;
+        font-family: inherit;
+        color: #0f172a;
+        background: #ffffff;
+        border: 1.5px solid #c7d2fe;
+        border-radius: 10px;
         outline: none;
-        border: 1px solid #0000002c;
-        border-radius: 0 3px 3px 0;
-        color: #000;
-        opacity: 0.8;
-        font-size: 13px;
-        background-color: #fafafa;
-    }
-    .search-row {
-        display: flex;
-        align-items: center;
-    }
-    .search-row .search {
-        padding: 5px 8px;
-        border: 1px solid #0000003d;
-        font-size: 12px;
-        border-radius: 3px 0 0 3px;
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+        &::placeholder { color: #94a3b8; }
+        &:focus {
+            border-color: #4f6ef7;
+            box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.13);
+        }
     }
 
-    .search-row .search:focus {
-        border: 1px solid #000000ad;
-        outline: none;
+    /* ── Filters row ── */
+    .filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
     }
-    .search-row .icon {
-        background-color: #e4e4e4;
-        border: 1px solid #0000003d;
-        border-left: 0;
-        color: var(--color-black);
-        font-weight: 900;
-        padding: 5.5px 6px;
-        font-size: 17px;
-        border-radius: 0 3px 3px 0;
+
+    .filter-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #64748b;
+        padding-right: 4px;
+
+        svg { font-size: 16px; }
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+        transition: border-color 0.2s ease;
+
+        &:focus-within {
+            border-color: #4f6ef7;
+            box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.1);
+        }
+    }
+
+    .filter-item-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 6px 8px 6px 10px;
+        background: #f8faff;
+        border-right: 1px solid #e2e8f0;
+        white-space: nowrap;
+    }
+
+    .filter-select {
+        font-size: 12.5px;
+        font-family: inherit;
+        color: #0f172a;
+        background: #fff;
+        border: none;
+        outline: none;
+        padding: 6px 10px 6px 8px;
+        text-transform: capitalize;
+        cursor: pointer;
+    }
+
+    .clear-btn {
+        font-size: 12px;
+        font-weight: 600;
+        color: #64748b;
+        background: #f1f5f9;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 5px 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: #0f172a;
+            color: #fff;
+            border-color: #0f172a;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .filter-label { display: none; }
+        .filters { gap: 6px; }
     }
 `;
 

@@ -8,7 +8,7 @@ import {
     EditJob, AddJob, ManageJobs, Job, MyJobs,
     EditProfile, ManageUsers,
     SkillsManager, GitHubConnect, Certifications, Projects,
-    CandidateSearch, ScreeningQuestions,
+    CandidateSearch, ScreeningQuestions, RecruiterApply,
 } from "../pages";
 
 import { JobContext } from "../context/JobContext";
@@ -33,6 +33,7 @@ const router = createBrowserRouter([
             },
             { path: "register", element: <Register /> },
             { path: "login",    element: <Login /> },
+            { path: "recruiter-apply", element: <RecruiterApply /> },
             {
                 path: "dashboard",
                 element: (

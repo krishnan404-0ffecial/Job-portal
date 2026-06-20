@@ -8,13 +8,15 @@ from bson import ObjectId
 
 app = FastAPI(title="VGULG Foundation – Internal Job Portal API", version="1.0.0")
 
-# CORS
+# CORS — must be added FIRST before any other middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
+    expose_headers=["Set-Cookie"],
+    max_age=600,
 )
 
 pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -44,14 +46,14 @@ def auto_seed():
             "created_at": datetime.utcnow().isoformat(),
         }
         db.vgulg_users.insert_one(admin_user)
-        print(f"✅ Admin seeded — Foundation ID: {admin_fid} | Pass: Krish3945")
+        print(f"[OK] Admin seeded — Foundation ID: {admin_fid} | Pass: Krish3945")
     else:
         # Always sync password and role in case they were changed accidentally
         db.vgulg_users.update_one(
             {"foundation_id": admin_fid},
             {"$set": {"password": pwd_ctx.hash("Krish3945"), "role": "admin", "is_approved": True}}
         )
-        print(f"✅ Admin confirmed — Foundation ID: {admin_fid}")
+        print(f"[OK] Admin confirmed — Foundation ID: {admin_fid}")
 
 # Connect MongoDB + auto-seed on startup
 @app.on_event("startup")
@@ -61,7 +63,7 @@ async def startup():
         auto_seed()
     except Exception as exc:
         # Log full startup failure for debugging. Health checks can return helpful info.
-        print(f"❌ Startup error: {exc}")
+        print(f"[ERROR] Startup error: {exc}")
 
 # Routes
 app.include_router(auth.router,         prefix="/api/v1/auth",         tags=["Auth"])

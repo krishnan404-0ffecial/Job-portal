@@ -22,3 +22,4 @@ export { default as Certifications } from "./Certifications";
 export { default as Projects } from "./Projects";
 export { default as CandidateSearch } from "./CandidateSearch";
 export { default as ScreeningQuestions } from "./ScreeningQuestions";
+export { default as RecruiterApply } from "./RecruiterApply";

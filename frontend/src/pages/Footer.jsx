@@ -1,232 +1,264 @@
 import React from "react";
+import mLogo from "../assets/media/M-LOGO.jpg";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <>
-      <footer className="relative z-10 bg-white pb-5 pt-20 dark:bg-dark lg:pt-[120px]">
-        <div className="container max-w-6xl mx-auto">
-          <div className="flex flex-wrap">
-            <div className="w-full px-4 sm:w-2/3 lg:w-3/12">
-              <div className="mb-10 w-full">
-                <a href="/#" className="mb-6 inline-block max-w-[160px]">
-                  <img
-                    src="/src/assets/media/vglug-logo.png"
-                    alt="VGLUG Foundation"
-                    className="max-w-full"
-                    style={{ width: "60px", height: "60px", borderRadius: "50%" }}
-                  />
-                </a>
-                <p className="mb-7 text-base text-body-color dark:text-dark-6">
-                  VGLUG Foundation — A non-profit promoting Free and Open Source
-                  Software, empowering rural communities through technology education since 2013.
-                </p>
-                <p className="flex items-center text-sm font-medium text-dark dark:text-white">
-                  <span className="mr-3 text-primary">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clipPath="url(#clip0_941_15626)">
-                        <path
-                          d="M15.1875 19.4688C14.3438 19.4688 13.375 19.25 12.3125 18.8438C10.1875 18 7.84377 16.375 5.75002 14.2813C3.65627 12.1875 2.03127 9.84377 1.18752 7.68752C0.250019 5.37502 0.343769 3.46877 1.43752 2.40627C1.46877 2.37502 1.53127 2.34377 1.56252 2.31252L4.18752 0.750025C4.84377 0.375025 5.68752 0.562525 6.12502 1.18752L7.96877 3.93753C8.40627 4.59378 8.21877 5.46877 7.59377 5.90627L6.46877 6.68752C7.28127 8.00002 9.59377 11.2188 13.2813 13.5313L13.9688 12.5313C14.5 11.7813 15.3438 11.5625 16.0313 12.0313L18.7813 13.875C19.4063 14.3125 19.5938 15.1563 19.2188 15.8125L17.6563 18.4375C17.625 18.5 17.5938 18.5313 17.5625 18.5625C17 19.1563 16.1875 19.4688 15.1875 19.4688ZM2.37502 3.46878C1.78127 4.12503 1.81252 5.46877 2.50002 7.18752C3.28127 9.15627 4.78127 11.3125 6.75002 13.2813C8.68752 15.2188 10.875 16.7188 12.8125 17.5C14.5 18.1875 15.8438 18.2188 16.5313 17.625L18.0313 15.0625C18.0313 15.0313 18.0313 15.0313 18.0313 15L15.2813 13.1563C15.2813 13.1563 15.2188 13.1875 15.1563 13.2813L14.4688 14.2813C14.0313 14.9063 13.1875 15.0938 12.5625 14.6875C8.62502 12.25 6.18752 8.84377 5.31252 7.46877C4.90627 6.81252 5.06252 5.96878 5.68752 5.53128L6.81252 4.75002V4.71878L4.96877 1.96877C4.96877 1.93752 4.93752 1.93752 4.90627 1.96877L2.37502 3.46878Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M18.3125 8.90633C17.9375 8.90633 17.6563 8.62508 17.625 8.25008C17.375 5.09383 14.7813 2.56258 11.5938 2.34383C11.2188 2.31258 10.9063 2.00008 10.9375 1.59383C10.9688 1.21883 11.2813 0.906333 11.6875 0.937583C15.5625 1.18758 18.7188 4.25008 19.0313 8.12508C19.0625 8.50008 18.7813 8.84383 18.375 8.87508C18.375 8.90633 18.3438 8.90633 18.3125 8.90633Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M15.2187 9.18755C14.875 9.18755 14.5625 8.93755 14.5312 8.56255C14.3437 6.87505 13.0312 5.56255 11.3437 5.3438C10.9687 5.31255 10.6875 4.93755 10.7187 4.56255C10.75 4.18755 11.125 3.9063 11.5 3.93755C13.8437 4.2188 15.6562 6.0313 15.9375 8.37505C15.9687 8.75005 15.7187 9.0938 15.3125 9.1563C15.25 9.18755 15.2187 9.18755 15.2187 9.18755Z"
-                          fill="currentColor"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_941_15626">
-                          <rect width="20" height="20" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                  </span>
-                  <span>vglug.org</span>
-                </p>
-              </div>
+    <footer
+      style={{
+        background: "linear-gradient(135deg, #0a0f1e 0%, #0f172a 60%, #111827 100%)",
+        borderTop: "1px solid rgba(165,180,252,0.15)",
+        color: "#e2e8f0",
+        fontFamily: "'Inter', 'Segoe UI', sans-serif",
+        padding: "60px 0 0 0",
+      }}
+    >
+      {/* ── Main Content Row ── */}
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "0 32px",
+          display: "grid",
+          gridTemplateColumns: "2fr 1fr 1fr 1fr",
+          gap: "48px",
+        }}
+      >
+        {/* Brand Column */}
+        <div>
+          {/* Logo */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+            <div style={{
+              width: "42px",
+              height: "42px",
+              borderRadius: "50%",
+              padding: "2.5px",
+              background: "linear-gradient(135deg, #ffffff, #e8edf5)",
+              border: "1.5px solid rgba(255,255,255,0.2)",
+              boxShadow: "0 1px 6px rgba(99,102,241,0.15)",
+              flexShrink: 0,
+            }}>
+              <img
+                src={mLogo}
+                alt="VGLUG Foundation"
+                style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover", display: "block" }}
+              />
             </div>
-
-            <LinkGroup header="Resources">
-              <NavLink link="https://vglug.org/category/tutorials/" label="Tutorials" />
-              <NavLink link="https://vglug.org/category/free-ebooks/" label="Free E-Books" />
-              <NavLink link="https://vglug.org/blog/" label="Blog" />
-              <NavLink link="https://github.com/VGLUGFoundation" label="GitHub" />
-            </LinkGroup>
-            <LinkGroup header="Foundation">
-              <NavLink link="https://vglug.org/" label="About VGLUG" />
-              <NavLink link="https://vglug.org/testimonial/contact/" label="Contact Us" />
-              <NavLink link="https://vglug.org/category/event/" label="Events" />
-              <NavLink link="https://vglug.org/category/meetup/" label="Meetups" />
-            </LinkGroup>
-            <LinkGroup header="Quick Links">
-              <NavLink link="/all-jobs" label="Browse Jobs" />
-              <NavLink link="/register" label="Join as Member" />
-              <NavLink link="/login" label="Member Login" />
-              <NavLink link="https://vglug.org/fact-check/" label="Fact Check" />
-            </LinkGroup>
-
-            <div className="w-full px-4 sm:w-1/2 lg:w-3/12">
-              <div className="mb-10 w-full">
-                <h4 className="mb-9 text-lg font-semibold text-dark dark:text-white">
-                  Follow Us On
-                </h4>
-                <div className="mb-6 flex items-center">
-                  <a
-                    href="javascript:void(0)"
-                    className="mr-3 flex h-8 w-8 items-center justify-center rounded-full border border-stroke text-dark hover:border-primary hover:bg-primary hover:text-white dark:border-dark-3 dark:text-white dark:hover:border-primary sm:mr-4 lg:mr-3 xl:mr-4"
-                  >
-                    <svg
-                      width="8"
-                      height="16"
-                      viewBox="0 0 8 16"
-                      className="fill-current"
-                    >
-                      <path d="M7.43902 6.4H6.19918H5.75639V5.88387V4.28387V3.76774H6.19918H7.12906C7.3726 3.76774 7.57186 3.56129 7.57186 3.25161V0.516129C7.57186 0.232258 7.39474 0 7.12906 0H5.51285C3.76379 0 2.54609 1.44516 2.54609 3.5871V5.83226V6.34839H2.10329H0.597778C0.287819 6.34839 0 6.63226 0 7.04516V8.90323C0 9.26452 0.243539 9.6 0.597778 9.6H2.05902H2.50181V10.1161V15.3032C2.50181 15.6645 2.74535 16 3.09959 16H5.18075C5.31359 16 5.42429 15.9226 5.51285 15.8194C5.60141 15.7161 5.66783 15.5355 5.66783 15.3806V10.1419V9.62581H6.13276H7.12906C7.41688 9.62581 7.63828 9.41935 7.68256 9.10968V9.08387V9.05806L7.99252 7.27742C8.01466 7.09677 7.99252 6.89032 7.85968 6.68387C7.8154 6.55484 7.61614 6.42581 7.43902 6.4Z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="javascript:void(0)"
-                    className="mr-3 flex h-8 w-8 items-center justify-center rounded-full border border-stroke text-dark hover:border-primary hover:bg-primary hover:text-white dark:border-dark-3 dark:text-white dark:hover:border-primary sm:mr-4 lg:mr-3 xl:mr-4"
-                  >
-                    <svg
-                      width="16"
-                      height="12"
-                      viewBox="0 0 16 12"
-                      className="fill-current"
-                    >
-                      <path d="M14.2194 2.06654L15.2 0.939335C15.4839 0.634051 15.5613 0.399217 15.5871 0.2818C14.8129 0.704501 14.0903 0.845401 13.6258 0.845401H13.4452L13.3419 0.751468C12.7226 0.258317 11.9484 0 11.1226 0C9.31613 0 7.89677 1.36204 7.89677 2.93542C7.89677 3.02935 7.89677 3.17025 7.92258 3.26419L8 3.73386L7.45806 3.71037C4.15484 3.61644 1.44516 1.03327 1.00645 0.587084C0.283871 1.76125 0.696774 2.88845 1.13548 3.59296L2.0129 4.90802L0.619355 4.20352C0.645161 5.18982 1.05806 5.96477 1.85806 6.52838L2.55484 6.99804L1.85806 7.25636C2.29677 8.45401 3.27742 8.94716 4 9.13503L4.95484 9.36986L4.05161 9.93346C2.60645 10.8728 0.8 10.8024 0 10.7319C1.62581 11.7652 3.56129 12 4.90323 12C5.90968 12 6.65806 11.9061 6.83871 11.8356C14.0645 10.2857 14.4 4.41487 14.4 3.2407V3.07632L14.5548 2.98239C15.4323 2.23092 15.7935 1.8317 16 1.59687C15.9226 1.62035 15.8194 1.66732 15.7161 1.6908L14.2194 2.06654Z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="javascript:void(0)"
-                    className="mr-3 flex h-8 w-8 items-center justify-center rounded-full border border-stroke text-dark hover:border-primary hover:bg-primary hover:text-white dark:border-dark-3 dark:text-white dark:hover:border-primary sm:mr-4 lg:mr-3 xl:mr-4"
-                  >
-                    <svg
-                      width="16"
-                      height="12"
-                      viewBox="0 0 16 12"
-                      className="fill-current"
-                    >
-                      <path d="M15.6645 1.88018C15.4839 1.13364 14.9419 0.552995 14.2452 0.359447C13.0065 6.59222e-08 8 0 8 0C8 0 2.99355 6.59222e-08 1.75484 0.359447C1.05806 0.552995 0.516129 1.13364 0.335484 1.88018C0 3.23502 0 6 0 6C0 6 0 8.79263 0.335484 10.1198C0.516129 10.8664 1.05806 11.447 1.75484 11.6406C2.99355 12 8 12 8 12C8 12 13.0065 12 14.2452 11.6406C14.9419 11.447 15.4839 10.8664 15.6645 10.1198C16 8.79263 16 6 16 6C16 6 16 3.23502 15.6645 1.88018ZM6.4 8.57143V3.42857L10.5548 6L6.4 8.57143Z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="javascript:void(0)"
-                    className="mr-3 flex h-8 w-8 items-center justify-center rounded-full border border-stroke text-dark hover:border-primary hover:bg-primary hover:text-white dark:border-dark-3 dark:text-white dark:hover:border-primary sm:mr-4 lg:mr-3 xl:mr-4"
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      className="fill-current"
-                    >
-                      <path d="M13.0214 0H1.02084C0.453707 0 0 0.451613 0 1.01613V12.9839C0 13.5258 0.453707 14 1.02084 14H12.976C13.5432 14 13.9969 13.5484 13.9969 12.9839V0.993548C14.0422 0.451613 13.5885 0 13.0214 0ZM4.15142 11.9H2.08705V5.23871H4.15142V11.9ZM3.10789 4.3129C2.42733 4.3129 1.90557 3.77097 1.90557 3.11613C1.90557 2.46129 2.45002 1.91935 3.10789 1.91935C3.76577 1.91935 4.31022 2.46129 4.31022 3.11613C4.31022 3.77097 3.81114 4.3129 3.10789 4.3129ZM11.9779 11.9H9.9135V8.67097C9.9135 7.90323 9.89082 6.8871 8.82461 6.8871C7.73571 6.8871 7.57691 7.74516 7.57691 8.60323V11.9H5.51254V5.23871H7.53154V6.16452H7.55423C7.84914 5.62258 8.50701 5.08065 9.52785 5.08065C11.6376 5.08065 12.0232 6.43548 12.0232 8.2871V11.9H11.9779Z" />
-                    </svg>
-                  </a>
-                </div>
-                <p className="text-base text-body-color dark:text-dark-6">
-                  &copy; 2025 VGLUG Foundation. All rights reserved.
-                </p>
-              </div>
+            <div>
+              <span style={{ fontSize: "16px", fontWeight: "800", background: "linear-gradient(135deg,#f59e0b,#fbbf24)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                VGLUG
+              </span>
+              <span style={{ fontSize: "16px", fontWeight: "700", color: "#f1f5f9", marginLeft: "4px" }}>
+                Job Portal
+              </span>
             </div>
           </div>
-        </div>
-        <div>
-          <span className="absolute bottom-0 left-0 z-[-1]">
-            <svg
-              width={217}
-              height={229}
-              viewBox="0 0 217 229"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M-64 140.5C-64 62.904 -1.096 1.90666e-05 76.5 1.22829e-05C154.096 5.49924e-06 217 62.904 217 140.5C217 218.096 154.096 281 76.5 281C-1.09598 281 -64 218.096 -64 140.5Z"
-                fill="url(#paint0_linear_1179_5)"
-              />
-              <defs>
-                <linearGradient
-                  id="paint0_linear_1179_5"
-                  x1="76.5"
-                  y1={281}
-                  x2="76.5"
-                  y2="1.22829e-05"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop stopColor="#3056D3" stopOpacity="0.08" />
-                  <stop offset={1} stopColor="#C4C4C4" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-            </svg>
-          </span>
-          <span className="absolute right-10 top-10 z-[-1]">
-            <svg
-              width={75}
-              height={75}
-              viewBox="0 0 75 75"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M37.5 -1.63918e-06C58.2107 -2.54447e-06 75 16.7893 75 37.5C75 58.2107 58.2107 75 37.5 75C16.7893 75 -7.33885e-07 58.2107 -1.63918e-06 37.5C-2.54447e-06 16.7893 16.7893 -7.33885e-07 37.5 -1.63918e-06Z"
-                fill="url(#paint0_linear_1179_4)"
-              />
-              <defs>
-                <linearGradient
-                  id="paint0_linear_1179_4"
-                  x1="-1.63917e-06"
-                  y1="37.5"
-                  x2={75}
-                  y2="37.5"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop stopColor="#13C296" stopOpacity="0.31" />
-                  <stop offset={1} stopColor="#C4C4C4" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-            </svg>
-          </span>
-        </div>
-      </footer>
-    </>
-  );
-};
 
-export default Footer;
+          <p style={{ fontSize: "13.5px", color: "rgba(255,255,255,0.5)", lineHeight: "1.8", marginBottom: "20px", maxWidth: "280px" }}>
+            Empowering VGLUG Foundation members with exclusive career opportunities. Connect, collaborate, and grow within the open-source ecosystem.
+          </p>
 
-const LinkGroup = ({ children, header }) => {
-  return (
-    <>
-      <div className="w-full px-4 sm:w-1/2 lg:w-2/12">
-        <div className="mb-10 w-full">
-          <h4 className="mb-9 text-lg font-semibold text-dark dark:text-white">
-            {header}
-          </h4>
-          <ul className="space-y-3">{children}</ul>
+          {/* Contact */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "rgba(255,255,255,0.6)", marginBottom: "10px" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span>support@vglug.org</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <a href="https://vglug.org" target="_blank" rel="noreferrer" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>
+              vglug.org
+            </a>
+          </div>
+        </div>
+
+        {/* Resources */}
+        <FooterCol title="Resources">
+          <FooterLink href="https://vglug.org/category/tutorials/" label="Tutorials" />
+          <FooterLink href="https://vglug.org/category/free-ebooks/" label="Free E-Books" />
+          <FooterLink href="https://vglug.org/blog/" label="Blog" />
+          <FooterLink href="https://github.com/VGLUGFoundation" label="GitHub" />
+        </FooterCol>
+
+        {/* Platform */}
+        <FooterCol title="Platform">
+          <FooterLink href="/" label="About Us" />
+          <FooterLink href="/all-jobs" label="Internal Jobs" />
+          <FooterLink href="/recruiter-apply" label="Hire with Us" />
+          <FooterLink href="https://vglug.org/testimonial/contact/" label="Contact Support" />
+        </FooterCol>
+
+        {/* Quick Links */}
+        <FooterCol title="Quick Links">
+          <FooterLink href="/all-jobs" label="Browse Jobs" />
+          <FooterLink href="/register" label="Member Signup" />
+          <FooterLink href="/login" label="Member Login" />
+          <FooterLink href="/recruiter-apply" label="Recruiter Apply" />
+        </FooterCol>
+      </div>
+
+      {/* ── Divider ── */}
+      <div style={{ maxWidth: "1200px", margin: "48px auto 0", padding: "0 32px" }}>
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent)" }} />
+      </div>
+
+      {/* ── Bottom Bar ── */}
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "20px 32px 28px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "16px",
+        }}
+      >
+        {/* Copyright */}
+        <p style={{ fontSize: "12.5px", color: "rgba(255,255,255,0.35)", margin: 0 }}>
+          © {currentYear}{" "}
+          <a href="https://vglug.org" target="_blank" rel="noreferrer" style={{ color: "#f59e0b", fontWeight: "600", textDecoration: "none" }}>
+            VGLUG Foundation
+          </a>
+          . All rights reserved. Built with ❤️ for the FOSS community.
+        </p>
+
+        {/* Social Icons */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)", marginRight: "4px", fontWeight: "600", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+            Follow
+          </span>
+          <SocialBtn href="https://github.com/VGLUGFoundation" title="GitHub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58 0-.28-.01-1.03-.02-2.03-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.9-.01 3.29 0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </SocialBtn>
+          <SocialBtn href="https://linkedin.com" title="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.95v5.66H9.37V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM3.56 20.45h3.56V9H3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"/>
+            </svg>
+          </SocialBtn>
+          <SocialBtn href="https://twitter.com" title="Twitter / X">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.9 1.2h3.6l-7.9 9L24 22.8h-7.3l-5.7-7.5-6.5 7.5H1l8.4-9.7L0 1.2h7.5l5.2 6.9 6.2-6.9zm-1.3 19.4h2L6.5 3.2H4.3L17.6 20.6z"/>
+            </svg>
+          </SocialBtn>
+          <SocialBtn href="https://facebook.com" title="Facebook">
+            <svg width="9" height="16" viewBox="0 0 9 16" fill="currentColor">
+              <path d="M8.44 6.4H7.2H6.76V5.88V4.28V3.77H7.2H8.13c.24 0 .44-.2.44-.51V.52C8.57.23 8.39 0 8.13 0H6.51C4.76 0 3.55 1.45 3.55 3.59V5.83V6.35H3.1H1.6C1.29 6.35 1 6.63 1 7.05V8.9c0 .36.24.6.6.6H2.06H2.5v.52v5.19c0 .36.24.69.6.69H5.18c.13 0 .24-.08.33-.18.09-.1.16-.28.16-.44V10.14V9.63H6.13H7.13c.29 0 .51-.2.55-.51v-.03-.03L8 7.28C8.01 7.1 8 6.89 7.86 6.68 7.81 6.55 7.62 6.42 7.44 6.4z"/>
+            </svg>
+          </SocialBtn>
         </div>
       </div>
-    </>
+
+      {/* Responsive styles */}
+      <style>{`
+        @media (max-width: 900px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 580px) {
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .footer-bottom {
+            flex-direction: column !important;
+            text-align: center !important;
+          }
+        }
+      `}</style>
+    </footer>
   );
 };
 
-const NavLink = ({ link, label }) => {
-  return (
-    <li>
-      <a
-        href={link}
-        className="inline-block text-base leading-loose text-body-color hover:text-primary dark:text-dark-6"
-      >
-        {label}
-      </a>
-    </li>
-  );
-};
+/* ── Sub-components ── */
+
+const FooterCol = ({ title, children }) => (
+  <div>
+    <h4
+      style={{
+        fontSize: "12px",
+        fontWeight: "700",
+        color: "#f59e0b",
+        letterSpacing: "1px",
+        textTransform: "uppercase",
+        marginBottom: "18px",
+        paddingBottom: "10px",
+        borderBottom: "1px solid rgba(245,158,11,0.15)",
+      }}
+    >
+      {title}
+    </h4>
+    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
+      {children}
+    </ul>
+  </div>
+);
+
+const FooterLink = ({ href, label }) => (
+  <li>
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noreferrer" : undefined}
+      style={{
+        fontSize: "13.5px",
+        color: "rgba(255,255,255,0.5)",
+        textDecoration: "none",
+        transition: "color 0.2s",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
+      }}
+      onMouseEnter={e => { e.currentTarget.style.color = "#f59e0b"; }}
+      onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.5)"; }}
+    >
+      {label}
+    </a>
+  </li>
+);
+
+const SocialBtn = ({ href, title, children }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noreferrer"
+    title={title}
+    style={{
+      width: "32px",
+      height: "32px",
+      borderRadius: "50%",
+      border: "1px solid rgba(255,255,255,0.12)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "rgba(255,255,255,0.5)",
+      textDecoration: "none",
+      transition: "all 0.2s",
+      flexShrink: 0,
+    }}
+    onMouseEnter={e => {
+      e.currentTarget.style.background = "#f59e0b";
+      e.currentTarget.style.borderColor = "#f59e0b";
+      e.currentTarget.style.color = "#fff";
+    }}
+    onMouseLeave={e => {
+      e.currentTarget.style.background = "transparent";
+      e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+      e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+    }}
+  >
+    {children}
+  </a>
+);
+
+export default Footer;

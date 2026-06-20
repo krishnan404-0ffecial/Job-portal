@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import photo from "../assets/media/LandingPage/hero.png";
 import Navbar from "../components/shared/Navbar";
 import HowWorks from "../components/Home Page/HowWorks";
-import Team from "../components/Home Page/Team";
+import Features from "../components/Home Page/Features";
 import Brands from "../components/Home Page/Brands";
 import Testimonial from "../components/Home Page/Testimonial";
 
@@ -95,7 +95,7 @@ const Landing = () => {
 
             <div>
                 <HowWorks />
-                <Team />
+                <Features />
                 <Testimonial />
                 <Brands />
             </div>

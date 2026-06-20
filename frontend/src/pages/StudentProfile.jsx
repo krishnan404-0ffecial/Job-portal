@@ -7,6 +7,7 @@ import {
     FiUser, FiMail, FiShield
 } from "react-icons/fi";
 import { useUserContext } from "../context/UserContext";
+import ProfileCompletionWidget from "../components/shared/ProfileCompletionWidget";
 import axios from "axios";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
@@ -115,6 +116,9 @@ const StudentProfile = () => {
             <div className="grid-two">
                 {/* ── Left Column ── */}
                 <div className="col-left">
+                    {/* Profile Completion Widget */}
+                    <ProfileCompletionWidget user={user} />
+
                     {/* Info Card */}
                     <div className="card">
                         <h3 className="card-title"><FiUser /> Personal Info</h3>
