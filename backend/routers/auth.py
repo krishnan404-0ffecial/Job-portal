@@ -120,13 +120,13 @@ def login(data: LoginModel, response: Response, request: Request):
 
     token = create_token({"id": str(user["_id"]), "role": user["role"]})
     
-    origin = request.headers.get("origin", "")
-    is_local = "localhost" in origin or "127.0.0.1" in origin
+    # Determine if request is secure (either directly or via proxy/Vercel)
+    is_secure = request.url.scheme == "https" or request.headers.get("x-forwarded-proto", "") == "https"
     
     response.set_cookie(
         key="vgulg_token", value=token,
-        httponly=True, secure=not is_local,
-        samesite="lax" if is_local else "none",
+        httponly=True, secure=is_secure,
+        samesite="none" if is_secure else "lax",
         max_age=86400
     )
     print(f"[OK] User logged in: {foundation_id}")
@@ -160,12 +160,11 @@ def reset_password(data: ResetPasswordModel):
 # ── Logout ───────────────────────────────────────────────
 @router.post("/logout")
 def logout(response: Response, request: Request):
-    origin = request.headers.get("origin", "")
-    is_local = "localhost" in origin or "127.0.0.1" in origin
+    is_secure = request.url.scheme == "https" or request.headers.get("x-forwarded-proto", "") == "https"
     response.delete_cookie(
         key="vgulg_token",
-        secure=not is_local,
-        samesite="lax" if is_local else "none"
+        secure=is_secure,
+        samesite="none" if is_secure else "lax"
     )
     return {"status": True, "message": "Logged out successfully"}
 
