@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 dayjs.extend(advancedFormat);
 
-const API = "https://job-portal-jk38.onrender.com/api/v1";
+const API = "http://localhost:8000/api/v1";
 
 const StudentProfile = () => {
     const { user, handleFetchMe } = useUserContext();
@@ -117,7 +117,7 @@ const StudentProfile = () => {
                 {/* ── Left Column ── */}
                 <div className="col-left">
                     {/* Profile Completion Widget */}
-                    <ProfileCompletionWidget user={user} />
+                    {user?.role !== "admin" && <ProfileCompletionWidget user={user} />}
 
                     {/* Info Card */}
                     <div className="card">
@@ -304,24 +304,24 @@ const Wrapper = styled.div`
     .hero-bg {
         position: absolute; inset: 0;
         background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
-        height: 110px;
+        height: 95px;
     }
     .hero-body {
         position: relative;
-        padding: 70px 2rem 1.5rem;
+        padding: 55px 1.5rem 1.25rem;
         background: #fff;
         display: flex;
         align-items: flex-start;
-        gap: 1.5rem;
+        gap: 1.25rem;
         flex-wrap: wrap;
     }
     .avatar-ring {
-        width: 80px; height: 80px;
+        width: 72px; height: 72px;
         border-radius: 50%;
         background: linear-gradient(135deg, #f59e0b, #d97706);
         padding: 3px;
         flex-shrink: 0;
-        margin-top: -45px;
+        margin-top: -38px;
         box-shadow: 0 4px 16px rgba(245,158,11,0.4);
     }
     .avatar-inner {
@@ -332,7 +332,7 @@ const Wrapper = styled.div`
         overflow: hidden;
     }
     .avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-    .avatar-letter { font-size: 2rem; font-weight: 800; color: #4338ca; }
+    .avatar-letter { font-size: 1.7rem; font-weight: 800; color: #4338ca; }
 
     .hero-info { flex: 1; min-width: 200px; }
     .hero-name { font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; }
@@ -379,11 +379,11 @@ const Wrapper = styled.div`
 
     @media (max-width: 600px) {
         .hero-body {
-            padding: 60px 1.25rem 1.5rem;
+            padding: 48px 1rem 1.25rem;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 1rem;
+            gap: 0.85rem;
         }
         .hero-tags { justify-content: center; }
         .hero-actions { justify-content: center; width: 100%; }
@@ -407,20 +407,20 @@ const Wrapper = styled.div`
     .card {
         background: #fff;
         border-radius: 16px;
-        padding: 1.25rem;
+        padding: 1rem;
         box-shadow: 0 2px 12px rgba(0,0,0,0.06);
         border: 1px solid #f1f5f9;
     }
     .card-head {
         display: flex; justify-content: space-between; align-items: center;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
     .card-title {
         display: flex; align-items: center; gap: 8px;
-        font-size: 14px; font-weight: 700; color: #1e293b;
+        font-size: 13.5px; font-weight: 700; color: #1e293b;
     }
     .card-action {
-        font-size: 12px; font-weight: 700; color: #4338ca;
+        font-size: 11.5px; font-weight: 700; color: #4338ca;
         text-decoration: none; transition: 0.15s;
     }
     .card-action:hover { color: #6366f1; }

@@ -10,9 +10,7 @@ const Testimonial = () => {
         <figure className="mt-10">
           <blockquote className="text-center text-xl font-semibold leading-8 text-gray-900 sm:text-2xl sm:leading-9">
             <p>
-              "Technology should be accessible to all — not just the privileged few. At VGLUG Foundation, we believe
-              in empowering rural youth through Free and Open Source Software, bridging the digital divide one village
-              at a time. Our mission is to liberate knowledge and nurture the next generation of innovators."
+              "Finding the right talent or the perfect job shouldn't be a struggle. Our platform connects skilled professionals with top-tier companies, fostering career growth and innovation. We believe in creating opportunities that empower individuals and drive business success."
             </p>
           </blockquote>
           <figcaption className="mt-10">
@@ -32,12 +30,12 @@ const Testimonial = () => {
         </figure>
       </div>
       <div className="mt-16 text-center">
-        <p className="text-lg font-semibold text-gray-900">Trusted by the FOSS community across India</p>
+        <p className="text-lg font-semibold text-gray-900">Trusted by top companies and professionals</p>
         <div className="mt-6 flex items-center justify-center gap-x-8 flex-wrap gap-y-4">
-          <span className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">🐧 100+ Villages Reached</span>
-          <span className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">👨‍💻 1000+ Youth Trained</span>
-          <span className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">🌍 Since 2013</span>
-          <span className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">🔓 Open Source First</span>
+          <span className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">🏢 10K+ Companies</span>
+          <span className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">👨‍💻 1M+ Job Seekers</span>
+          <span className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">🚀 Daily Updates</span>
+          <span className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">🔒 Verified Profiles</span>
         </div>
       </div>
     </section>

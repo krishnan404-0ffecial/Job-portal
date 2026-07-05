@@ -12,16 +12,19 @@ const UserContext = ({ children }) => {
         setUserLoading(true);
         try {
             const response = await axios.get(
-                `https://job-portal-jk38.onrender.com/api/v1/auth/me`,
+                `http://localhost:8000/api/v1/auth/me`,
                 { withCredentials: true }
             );
             setUserError({ status: false, message: "" });
             setUser(response?.data?.result);
+            setUserLoading(false);
+            return true;
         } catch (error) {
             setUserError({ status: true, message: error?.message });
             setUser({ status: false });
+            setUserLoading(false);
+            return false;
         }
-        setUserLoading(false);
     };
 
     useEffect(() => {

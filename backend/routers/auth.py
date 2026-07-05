@@ -97,7 +97,7 @@ def register(data: RegisterModel, response: Response):
 
 # ── Login ────────────────────────────────────────────────
 @router.post("/login")
-def login(data: LoginModel, response: Response):
+def login(data: LoginModel, response: Response, request: Request):
     try:
         db = get_db()
     except RuntimeError as exc:
@@ -119,10 +119,14 @@ def login(data: LoginModel, response: Response):
         raise HTTPException(status_code=403, detail="Your account is pending admin approval.")
 
     token = create_token({"id": str(user["_id"]), "role": user["role"]})
+    
+    origin = request.headers.get("origin", "")
+    is_local = "localhost" in origin or "127.0.0.1" in origin
+    
     response.set_cookie(
         key="vgulg_token", value=token,
-        httponly=True, secure=True,
-        samesite="none",
+        httponly=True, secure=not is_local,
+        samesite="lax" if is_local else "none",
         max_age=86400
     )
     print(f"[OK] User logged in: {foundation_id}")
@@ -155,11 +159,13 @@ def reset_password(data: ResetPasswordModel):
 
 # ── Logout ───────────────────────────────────────────────
 @router.post("/logout")
-def logout(response: Response):
+def logout(response: Response, request: Request):
+    origin = request.headers.get("origin", "")
+    is_local = "localhost" in origin or "127.0.0.1" in origin
     response.delete_cookie(
         key="vgulg_token",
-        secure=True,
-        samesite="none"
+        secure=not is_local,
+        samesite="lax" if is_local else "none"
     )
     return {"status": True, "message": "Logged out successfully"}
 

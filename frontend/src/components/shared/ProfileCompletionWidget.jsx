@@ -111,31 +111,31 @@ const getColor = (pct) => {
 
 /* ─── SVG Ring ────────────────────────────────────────────────────────────── */
 const Ring = ({ pct, color }) => {
-    const r = 44;
+    const r = 36;
     const circ = 2 * Math.PI * r;
     const dash = (pct / 100) * circ;
 
     return (
-        <svg width="110" height="110" viewBox="0 0 110 110">
+        <svg width="90" height="90" viewBox="0 0 90 90">
             {/* Track */}
-            <circle cx="55" cy="55" r={r} fill="none" stroke="#e2e8f0" strokeWidth="9" />
+            <circle cx="45" cy="45" r={r} fill="none" stroke="#e2e8f0" strokeWidth="7" />
             {/* Progress */}
             <circle
-                cx="55" cy="55" r={r}
+                cx="45" cy="45" r={r}
                 fill="none"
                 stroke={color.stroke}
-                strokeWidth="9"
+                strokeWidth="7"
                 strokeLinecap="round"
                 strokeDasharray={`${dash} ${circ}`}
                 strokeDashoffset="0"
-                transform="rotate(-90 55 55)"
+                transform="rotate(-90 45 45)"
                 style={{ transition: "stroke-dasharray 1s cubic-bezier(0.4,0,0.2,1)" }}
             />
             {/* Center text */}
-            <text x="55" y="51" textAnchor="middle" fill={color.stroke} fontSize="20" fontWeight="800" fontFamily="Inter, sans-serif">
+            <text x="45" y="42" textAnchor="middle" fill={color.stroke} fontSize="16" fontWeight="800" fontFamily="Inter, sans-serif">
                 {pct}%
             </text>
-            <text x="55" y="66" textAnchor="middle" fill="#64748b" fontSize="9" fontWeight="600" fontFamily="Inter, sans-serif">
+            <text x="45" y="55" textAnchor="middle" fill="#64748b" fontSize="8" fontWeight="600" fontFamily="Inter, sans-serif">
                 COMPLETE
             </text>
         </svg>
@@ -198,62 +198,7 @@ const ProfileCompletionWidget = ({ user }) => {
                 </div>
             </div>
 
-            {/* Divider */}
-            <div className="pcw-divider" />
 
-            {/* Checklist */}
-            <div className="pcw-checklist">
-                {/* Missing items */}
-                {missing.length > 0 && (
-                    <>
-                        <p className="pcw-section-title missing-title">⚡ Complete these to boost</p>
-                        {missing.map((s) => {
-                            const href = s.link ? s.link(user) : null;
-                            return (
-                                <div key={s.key} className="pcw-item pcw-item-missing">
-                                    <FiCircle size={14} className="pcw-icon-miss" />
-                                    <div className="pcw-item-body">
-                                        <span className="pcw-item-label">{s.label}</span>
-                                        <span className="pcw-item-tip">{s.tip}</span>
-                                    </div>
-                                    <span className="pcw-item-weight">+{s.weight}%</span>
-                                    {href && (
-                                        <Link to={href} className="pcw-item-link">
-                                            Add →
-                                        </Link>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </>
-                )}
-
-                {/* Completed items */}
-                {completed.length > 0 && (
-                    <>
-                        <p className="pcw-section-title done-title">✅ Completed</p>
-                        {completed.map((s) => (
-                            <div key={s.key} className="pcw-item pcw-item-done">
-                                <FiCheckCircle size={14} className="pcw-icon-done" />
-                                <div className="pcw-item-body">
-                                    <span className="pcw-item-label">{s.label}</span>
-                                </div>
-                                <span className="pcw-item-weight done-w">+{s.weight}%</span>
-                            </div>
-                        ))}
-                    </>
-                )}
-            </div>
-
-            {/* CTA */}
-            {percentage < 100 && (
-                <Link
-                    to={`/dashboard/edit-profile/${user?._id}`}
-                    className="pcw-cta"
-                >
-                    Complete Profile Now
-                </Link>
-            )}
         </Wrapper>
     );
 };
@@ -266,7 +211,7 @@ const shimmer = keyframes`0%,100%{opacity:1}50%{opacity:0.6}`;
 const Wrapper = styled.div`
     background: #fff;
     border-radius: 16px;
-    padding: 1.25rem;
+    padding: 0.85rem;
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     border: 1px solid #f1f5f9;
     font-family: 'Inter', sans-serif;
@@ -277,10 +222,10 @@ const Wrapper = styled.div`
         display: flex;
         align-items: center;
         gap: 6px;
-        font-size: 14px;
+        font-size: 13.5px;
         font-weight: 700;
         color: #1e293b;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
     .pcw-header-icon { color: #f59e0b; }
 
@@ -288,8 +233,8 @@ const Wrapper = styled.div`
     .pcw-ring-row {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.75rem;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
     }
     .pcw-ring { flex-shrink: 0; }
 
@@ -297,26 +242,26 @@ const Wrapper = styled.div`
     .pcw-summary { flex: 1; min-width: 0; }
     .pcw-label {
         display: inline-block;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 800;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         border-radius: 999px;
-        padding: 3px 10px;
-        margin-bottom: 6px;
+        padding: 2px 8px;
+        margin-bottom: 4px;
     }
     .pcw-fraction {
-        font-size: 12px;
+        font-size: 11px;
         color: #64748b;
         font-weight: 600;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
     .pcw-bar-track {
-        height: 6px;
+        height: 5px;
         background: #e2e8f0;
         border-radius: 999px;
         overflow: hidden;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
     }
     .pcw-bar-fill {
         height: 100%;
@@ -324,7 +269,7 @@ const Wrapper = styled.div`
         transition: width 1s cubic-bezier(0.4,0,0.2,1);
     }
     .pcw-motivate {
-        font-size: 11px;
+        font-size: 10.5px;
         color: #64748b;
         font-weight: 600;
     }
@@ -337,21 +282,21 @@ const Wrapper = styled.div`
     .pcw-divider {
         height: 1px;
         background: #f1f5f9;
-        margin: 0.75rem 0;
+        margin: 0.5rem 0;
     }
 
     /* ── Checklist ── */
     .pcw-checklist {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 3px;
     }
     .pcw-section-title {
-        font-size: 10px;
+        font-size: 9.5px;
         font-weight: 800;
         letter-spacing: 0.8px;
         text-transform: uppercase;
-        margin: 6px 0 4px;
+        margin: 4px 0 2px;
     }
     .missing-title { color: #f59e0b; }
     .done-title    { color: #10b981; }
@@ -359,11 +304,11 @@ const Wrapper = styled.div`
     .pcw-item {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 6px 8px;
+        gap: 6px;
+        padding: 4px 6px;
         border-radius: 8px;
         transition: background 0.15s;
-        font-size: 12px;
+        font-size: 11.5px;
     }
     .pcw-item-missing {
         background: #fffbeb;

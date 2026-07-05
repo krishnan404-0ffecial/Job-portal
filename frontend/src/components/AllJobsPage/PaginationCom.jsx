@@ -11,7 +11,7 @@ const PaginationCom = () => {
 
     const handlePageClick = (e) => {
         handleJobFetch(
-            `https://job-portal-jk38.onrender.com/api/v1/jobs/all?page=${e.selected + 1}&limit=10`
+            `http://localhost:8000/api/v1/jobs/all?page=${e.selected + 1}&limit=10`
         );
         window.scrollTo({ top: 0, behavior: "smooth" });
     };

@@ -35,7 +35,7 @@ const MiniJobCard = ({ job, appliedIds, onApplied }) => {
         setApplying(true);
         try {
             const response = await axios.post(
-                `https://job-portal-jk38.onrender.com/api/v1/applications/apply`,
+                `http://localhost:8000/api/v1/applications/apply`,
                 { job_id: job._id, resume_url: "" },
                 { withCredentials: true }
             );
@@ -100,7 +100,7 @@ const Applicant = () => {
         queryKey: ["my-applications"],
         queryFn: async () => {
             const res = await axios.get(
-                `https://job-portal-jk38.onrender.com/api/v1/applications/my`,
+                `http://localhost:8000/api/v1/applications/my`,
                 { withCredentials: true }
             );
             return res?.data?.result;
@@ -112,7 +112,7 @@ const Applicant = () => {
         queryKey: ["browse-jobs-inline"],
         queryFn: async () => {
             const res = await axios.get(
-                `https://job-portal-jk38.onrender.com/api/v1/jobs/all?page=1&limit=20`,
+                `http://localhost:8000/api/v1/jobs/all?page=1&limit=20`,
                 { withCredentials: true }
             );
             return res?.data?.result || [];
