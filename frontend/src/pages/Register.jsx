@@ -5,7 +5,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import styled from "styled-components";
 
-const API = "http://localhost:8000/api/v1";
+const API = "https://job-portal-gvcs.vercel.app/api/v1";
 
 const Register = () => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm();

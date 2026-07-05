@@ -24,7 +24,7 @@ const ManageJobs = () => {
         queryKey: ["my-jobs"],
         queryFn: () =>
             getAllHandler(
-                `http://localhost:8000/api/v1/jobs/my/posted`
+                `https://job-portal-gvcs.vercel.app/api/v1/jobs/my/posted`
             ),
     });
 
@@ -47,7 +47,7 @@ const ManageJobs = () => {
     const deleteJobHandler = async (id) => {
         try {
             const response = await axios.delete(
-                `http://localhost:8000/api/v1/jobs/${id}`,
+                `https://job-portal-gvcs.vercel.app/api/v1/jobs/${id}`,
                 { withCredentials: true }
             );
 

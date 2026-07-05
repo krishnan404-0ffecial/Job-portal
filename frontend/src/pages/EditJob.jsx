@@ -34,7 +34,7 @@ const EditJob = () => {
         queryKey: ["updateJob"],
         queryFn: () =>
             getSingleHandler(
-                `http://localhost:8000/api/v1/jobs/${id}`
+                `https://job-portal-gvcs.vercel.app/api/v1/jobs/${id}`
             ),
     });
 
@@ -97,7 +97,7 @@ const EditJob = () => {
         // posting;
         updateJobMutation.mutate({
             body: updateJob,
-            url: `http://localhost:8000/api/v1/jobs/${id}`,
+            url: `https://job-portal-gvcs.vercel.app/api/v1/jobs/${id}`,
         });
     };
     // const onSubmit = (data) => {

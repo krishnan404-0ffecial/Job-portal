@@ -11,7 +11,7 @@ const PaginationCom = () => {
 
     const handlePageClick = (e) => {
         handleJobFetch(
-            `http://localhost:8000/api/v1/jobs/all?page=${e.selected + 1}&limit=10`
+            `https://job-portal-gvcs.vercel.app/api/v1/jobs/all?page=${e.selected + 1}&limit=10`
         );
         window.scrollTo({ top: 0, behavior: "smooth" });
     };

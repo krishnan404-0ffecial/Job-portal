@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { useUserContext } from "../context/UserContext";
 import mLogo from "../assets/media/M-LOGO.jpg";
 
-const API = "http://localhost:8000/api/v1";
+const API = "https://job-portal-gvcs.vercel.app/api/v1";
 
 const Login = () => {
     const { handleFetchMe } = useUserContext();

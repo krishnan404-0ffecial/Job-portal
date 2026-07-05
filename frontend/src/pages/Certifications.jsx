@@ -6,7 +6,7 @@ import { FiAward, FiPlus, FiTrash2, FiExternalLink, FiUpload } from "react-icons
 import { useUserContext } from "../context/UserContext";
 import dayjs from "dayjs";
 
-const API = "http://localhost:8000/api/v1";
+const API = "https://job-portal-gvcs.vercel.app/api/v1";
 
 const Certifications = () => {
     const { user, handleFetchMe } = useUserContext();

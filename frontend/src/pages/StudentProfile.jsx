@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 dayjs.extend(advancedFormat);
 
-const API = "http://localhost:8000/api/v1";
+const API = "https://job-portal-gvcs.vercel.app/api/v1";
 
 const StudentProfile = () => {
     const { user, handleFetchMe } = useUserContext();

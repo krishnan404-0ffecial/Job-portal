@@ -30,7 +30,7 @@ const Navbar = ({ navbarRef }) => {
         if (result.isConfirmed) {
             try {
                 const response = await axios.post(
-                    "http://localhost:8000/api/v1/auth/logout",
+                    "https://job-portal-gvcs.vercel.app/api/v1/auth/logout",
                     {},
                     { withCredentials: true }
                 );

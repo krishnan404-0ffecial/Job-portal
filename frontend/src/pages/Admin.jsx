@@ -6,7 +6,7 @@ import styled from "styled-components";
 import LoadingComTwo from "../components/shared/LoadingComTwo";
 import Swal from "sweetalert2";
 
-const API = "http://localhost:8000/api/v1";
+const API = "https://job-portal-gvcs.vercel.app/api/v1";
 
 const fetcher = (url) => axios.get(url, { withCredentials: true }).then(r => r.data);
 

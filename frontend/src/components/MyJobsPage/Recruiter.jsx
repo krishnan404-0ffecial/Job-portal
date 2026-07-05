@@ -6,7 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { FiDownload, FiFilter } from "react-icons/fi";
 
-const API = "http://localhost:8000/api/v1";
+const API = "https://job-portal-gvcs.vercel.app/api/v1";
 
 const STATUS_COLOR = {
     pending:     { bg: "#fef3c7", color: "#92400e" },

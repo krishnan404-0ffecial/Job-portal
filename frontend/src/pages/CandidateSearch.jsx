@@ -4,7 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { FiSearch, FiDownload, FiUser, FiGithub, FiMail, FiMapPin, FiX, FiExternalLink } from "react-icons/fi";
 
-const API = "http://localhost:8000/api/v1";
+const API = "https://job-portal-gvcs.vercel.app/api/v1";
 
 /* ── Candidate Profile Modal ── */
 const CandidateModal = ({ candidate, onClose }) => {
