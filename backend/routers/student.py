@@ -23,8 +23,11 @@ router = APIRouter()
 # ── Directory setup ──────────────────────────────────────
 RESUMES_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads", "resumes")
 CERTS_DIR   = os.path.join(os.path.dirname(__file__), "..", "uploads", "certifications")
-os.makedirs(RESUMES_DIR, exist_ok=True)
-os.makedirs(CERTS_DIR,   exist_ok=True)
+try:
+    os.makedirs(RESUMES_DIR, exist_ok=True)
+    os.makedirs(CERTS_DIR,   exist_ok=True)
+except OSError:
+    pass  # Read-only filesystem (e.g. Vercel serverless) — uploads won't work
 
 # ── Skill keywords for simple AI extraction ──────────────
 SKILL_KEYWORDS = [

@@ -11,7 +11,10 @@ import os, shutil, re
 router = APIRouter()
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads", "resumes")
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+try:
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+except OSError:
+    pass  # Read-only filesystem (e.g. Vercel serverless) — uploads won't work
 
 # ── Skill keywords (same as student.py) ──────────────────
 SKILL_KEYWORDS = [

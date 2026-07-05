@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import auth, users, jobs, admin, applications, student, recruiter
@@ -9,22 +10,20 @@ from bson import ObjectId
 app = FastAPI(title="VGULG Foundation – Internal Job Portal API", version="1.0.0")
 
 # CORS — must be added FIRST before any other middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["http://localhost:5173", "http://127.0.0.1:5173","https://job-portal-azure-xi.vercel.app",],
-#     allow_credentials=True,
-#     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-#     allow_headers=["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
-#     expose_headers=["Set-Cookie"],
-#     max_age=600,
-# )
+# Build origins list dynamically so Vercel deployment URL is included
+_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://job-portal-azure-xi.vercel.app",
+]
+# Add any extra frontend URL set via env var (e.g. your Vercel frontend domain)
+_extra_origin = os.getenv("FRONTEND_URL", "")
+if _extra_origin and _extra_origin not in _origins:
+    _origins.append(_extra_origin)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "https://job-portal-azure-xi.vercel.app",
-    ],
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
