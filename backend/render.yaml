@@ -1,0 +1,21 @@
+# Render Blueprint — VGLUG Job Portal Backend
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: vglug-job-portal-api
+    runtime: python
+    rootDir: code_quester/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MONGO_URI
+        sync: false          # set manually in Render dashboard
+      - key: MONGO_DB_NAME
+        value: vglug_job_portal
+      - key: JWT_SECRET
+        sync: false          # set manually in Render dashboard
+      - key: FRONTEND_URL
+        sync: false          # set manually in Render dashboard
+      - key: PYTHON_VERSION
+        value: "3.11"
