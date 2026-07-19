@@ -359,4 +359,4 @@ npm run dev
 
 ---
 
-*For issues or contributions, contact the Foundation admin at **admin@vglug.org***
+*For issues or contributions, contact the Foundation admin at **admin@vglug.org*****
