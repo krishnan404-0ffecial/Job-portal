@@ -13,8 +13,8 @@ axios.defaults.withCredentials = true;
 
 // Intercept requests to redirect to local backend in development mode
 axios.interceptors.request.use((config) => {
-    const REMOTE_API = "https://job-portal-gvcs.vercel.app/api/v1";
-    const LOCAL_API = "http://localhost:8000/api/v1";
+    const REMOTE_API = "https://job-portal-mc7r.vercel.app/";
+    const LOCAL_API = "https://job-portal-mc7r.vercel.app/";
     if (config.url && config.url.includes(REMOTE_API)) {
         if (import.meta.env.DEV) {
             config.url = config.url.replace(REMOTE_API, LOCAL_API);

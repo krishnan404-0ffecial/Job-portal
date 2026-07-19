@@ -1,7 +1,8 @@
 fastapi
 uvicorn[standard]
 gunicorn
-pymongo
+pymongo[srv]
+dnspython
 python-dotenv
 passlib[bcrypt]
 python-jose[cryptography]
