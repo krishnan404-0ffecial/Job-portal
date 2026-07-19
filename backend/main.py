@@ -14,7 +14,7 @@ app = FastAPI(title="VGULG Foundation – Internal Job Portal API", version="1.0
 _origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://job-portal-azure-xi.vercel.app",
+    "https://job-portal-alpha-opal.vercel.app",
 ]
 # Add any extra frontend URL set via env var (e.g. your Vercel frontend domain)
 _extra_origin = os.getenv("FRONTEND_URL", "")
